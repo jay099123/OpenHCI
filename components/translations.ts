@@ -15,6 +15,7 @@ export const translations = {
     languageSelection: "Language Selection",
     connectProduct: "Connect Product",
     stepOf: "Step {current} of {total}",
+    setting: "Setting"
   },
   中文: {
     welcome: "歡迎！",
@@ -32,6 +33,7 @@ export const translations = {
     languageSelection: "語言選擇",
     connectProduct: "連結產品",
     stepOf: "第 {current} 步，共 {total} 步",
+    setting: "設定"
   },
   日本語: {
     welcome: "ようこそ！",
@@ -49,6 +51,7 @@ export const translations = {
     languageSelection: "言語選択",
     connectProduct: "製品接続",
     stepOf: "ステップ {current} / {total}",
+    setting: "設定"
   },
   한국어: {
     welcome: "환영합니다!",
@@ -66,6 +69,7 @@ export const translations = {
     languageSelection: "언어 선택",
     connectProduct: "제품 연결",
     stepOf: "단계 {current} / {total}",
+    setting: "설정"
   },
 };
 

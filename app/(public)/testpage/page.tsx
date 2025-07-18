@@ -8,16 +8,16 @@ import DaySelector from "@/components/week/dayselector";
 import Select from "@/components/drag/daylist";
 import { languages } from "@/components/translations";
 
-export default function Homepage() {
+export default function TestPage() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState("晚安！準備好今天的故事時間了嗎？");
+  const [currentDialog, setCurrentDialog] = useState("準備好探索星球了嗎？");
 
   const dialogs = [
-    "晚安！準備好今天的故事時間了嗎？",
-    "今天想聽什麼故事呢？",
-    "讓我們一起進入夢幻的故事世界吧！",
-    "準備好開始今天的冒險了嗎？",
-    "來聽一個溫馨的睡前故事吧！"
+    "準備好探索星球了嗎？",
+    "今天想去哪個星球冒險呢？",
+    "讓我們一起遨遊宇宙吧！",
+    "準備好開始星際旅行了嗎？",
+    "來一場太空探險吧！"
   ];
 
   // Data retention options
@@ -36,7 +36,7 @@ export default function Homepage() {
     label: lang.label
   }));
 
-  const handleImageClick = () => {
+  const handlePlanetClick = () => {
     const currentIndex = dialogs.indexOf(currentDialog);
     const nextIndex = (currentIndex + 1) % dialogs.length;
     setCurrentDialog(dialogs[nextIndex]);
@@ -46,10 +46,10 @@ export default function Homepage() {
     <div className="flex flex-col h-full px-6 py-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-xl font-black text-gray-800">GOO GOO TIME</h1>
+        <h1 className="text-xl font-black text-white">PLANET EXPLORER</h1>
         <button
           onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-          className="p-3 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-sm"
+          className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors shadow-sm"
         >
           <Image
             src="/setting.png"
@@ -63,38 +63,149 @@ export default function Homepage() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col items-center justify-center mt-15">
-        {/* Smile Image with Framer Motion */}
+        {/* 2D Planet with CSS */}
         <motion.div
-          className="cursor-pointer"
-          onClick={handleImageClick}
+          className="cursor-pointer relative"
+          onClick={handlePlanetClick}
           whileHover={{ scale: 1.05 }}
           whileTap={{
             scale: 1.1,
-            rotate: 15,
             transition: { duration: 0.1 }
           }}
         >
-          <Image
-            src="/sym_smile.png"
-            alt="Smile Symbol"
-            width={300}
-            height={300}
-            className="object-contain"
-          />
+          {/* Planet Container */}
+          <div className="relative w-80 h-80">
+            {/* Planetary Ring System - Behind Planet */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              {/* Ring System */}
+              <div className="relative w-96 h-20">
+                {/* Outer Ring */}
+                <div 
+                  className="absolute inset-0 rounded-full border-8 border-gray-300/60"
+                  style={{
+                    background: `linear-gradient(to right, transparent 35%, rgba(229, 231, 235, 0.4) 35%, rgba(229, 231, 235, 0.4) 65%, transparent 65%)`,
+                    transform: "scaleY(0.15)"
+                  }}
+                ></div>
+                
+                {/* Middle Ring */}
+                <div 
+                  className="absolute inset-2 rounded-full border-6 border-yellow-400/50"
+                  style={{
+                    background: `linear-gradient(to right, transparent 40%, rgba(251, 191, 36, 0.3) 40%, rgba(251, 191, 36, 0.3) 60%, transparent 60%)`,
+                    transform: "scaleY(0.12)"
+                  }}
+                ></div>
+                
+                {/* Inner Ring */}
+                <div 
+                  className="absolute inset-4 rounded-full border-4 border-purple-400/40"
+                  style={{
+                    background: `linear-gradient(to right, transparent 45%, rgba(167, 139, 250, 0.2) 45%, rgba(167, 139, 250, 0.2) 55%, transparent 55%)`,
+                    transform: "scaleY(0.1)"
+                  }}
+                ></div>
+              </div>
+            </motion.div>
+
+            {/* Planet Base - Above Rings */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              className="absolute inset-0 rounded-full shadow-2xl z-10"
+              style={{
+                background: `radial-gradient(circle at 30% 30%, #fbbf24 0%, #f59e0b 25%, #d97706 50%, #92400e 75%, #451a03 100%)`,
+                boxShadow: `
+                  inset -20px -20px 60px rgba(0, 0, 0, 0.4),
+                  inset 20px 20px 60px rgba(255, 255, 255, 0.1),
+                  0 0 40px rgba(251, 191, 36, 0.3)
+                `
+              }}
+            >
+              {/* Gas Giant Bands */}
+              <div className="absolute top-16 left-0 right-0 h-8 bg-amber-600/30 blur-sm"></div>
+              <div className="absolute top-28 left-0 right-0 h-6 bg-orange-600/40 blur-sm"></div>
+              <div className="absolute top-36 left-0 right-0 h-10 bg-yellow-600/20 blur-sm"></div>
+              <div className="absolute bottom-20 left-0 right-0 h-8 bg-amber-700/30 blur-sm"></div>
+              <div className="absolute bottom-12 left-0 right-0 h-6 bg-orange-700/40 blur-sm"></div>
+              
+              {/* Storm spot */}
+              <div className="absolute top-24 right-16 w-16 h-10 bg-red-600/40 rounded-full blur-sm"></div>
+            </motion.div>
+
+            {/* Planetary Ring System - In Front of Planet */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              className="absolute inset-0 flex items-center justify-center z-20"
+            >
+              {/* Ring System - Front Part */}
+              <div className="relative w-96 h-20">
+                {/* Outer Ring Front */}
+                <div 
+                  className="absolute inset-0 rounded-full border-t-8 border-gray-300/40"
+                  style={{
+                    background: `linear-gradient(to right, transparent 35%, rgba(229, 231, 235, 0.2) 35%, rgba(229, 231, 235, 0.2) 65%, transparent 65%)`,
+                    transform: "scaleY(0.15)"
+                  }}
+                ></div>
+                
+                {/* Middle Ring Front */}
+                <div 
+                  className="absolute inset-2 rounded-full border-t-6 border-yellow-400/30"
+                  style={{
+                    background: `linear-gradient(to right, transparent 40%, rgba(251, 191, 36, 0.15) 40%, rgba(251, 191, 36, 0.15) 60%, transparent 60%)`,
+                    transform: "scaleY(0.12)"
+                  }}
+                ></div>
+                
+                {/* Inner Ring Front */}
+                <div 
+                  className="absolute inset-4 rounded-full border-t-4 border-purple-400/20"
+                  style={{
+                    background: `linear-gradient(to right, transparent 45%, rgba(167, 139, 250, 0.1) 45%, rgba(167, 139, 250, 0.1) 55%, transparent 55%)`,
+                    transform: "scaleY(0.1)"
+                  }}
+                ></div>
+              </div>
+            </motion.div>
+
+            {/* Glow Effect */}
+            <div 
+              className="absolute inset-0 rounded-full opacity-20 blur-xl z-0"
+              style={{
+                background: `radial-gradient(circle, #fbbf24 0%, transparent 70%)`,
+                transform: "scale(1.3)"
+              }}
+            ></div>
+          </div>
         </motion.div>
 
         {/* Dialog Bubble with Framer Motion */}
         <motion.div
-          className="rounded-3xl p-4 min-w-[280px] max-w-[320px] relative mt-8"
-          style={{ backgroundColor: '#EE8aa5' }}
+          className="rounded-3xl p-4 min-w-[280px] max-w-[320px] relative mt-8 bg-white/10 backdrop-blur-sm border border-white/20"
           key={currentDialog}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="absolute -top-3 left-8 w-0 h-0 border-l-[12px] 
-          border-l-transparent border-r-[12px] border-r-transparent border-b-[12px]" 
-          style={{ borderBottomColor: '#EE8aa5' }}></div>
+          <div className="absolute -top-3 left-8 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[12px] border-b-white/10"></div>
 
           <motion.p
             className="text-white text-center text-base font-medium leading-relaxed"
@@ -170,10 +281,10 @@ export default function Homepage() {
                 {/* Notification Options */}
                 <div className="bg-orange-100 rounded-2xl p-4 space-y-4">
                   <Toggle 
-                    label="GooGoo Time 通知"
+                    label="探索通知"
                     defaultChecked={true}
                     variant="orange"
-                    onChange={(checked) => console.log('GooGoo Time notification:', checked)}
+                    onChange={(checked) => console.log('Explorer notification:', checked)}
                   />
                   <Toggle 
                     label="APP 通知"
