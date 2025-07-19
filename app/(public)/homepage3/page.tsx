@@ -111,19 +111,19 @@ export default function Homepage2() {
       title: "Crystal World",
       diaryContent: {
         date: "2025/07/19",
-        title: "水晶森林",
-        story: "在水晶森林裡，每一片葉子都閃閃發光，小兔子發現了一個神秘的寶石洞穴。",
-        story2: "小兔子走進洞穴，裡面有各種顏色的水晶，牠決定帶一塊回家當作紀念。",
-        story3: "回到家後，小兔子把水晶放在窗台上，陽光照射下來，水晶發出美麗的光芒。",
-        story4: "小兔子每天都會看著水晶，牠相信這塊水晶會帶來好運。",
-        illustration: "/diary-crystal.png",
-        illustration2: "/diary-crystal2.png", // Optional second illustration
-        illustration3: "/diary-crystal3.png", // Optional third illustration
-        illustration4: "/diary-crystal4.png", // Optional fourth illustration
-        dialog: "小兔子：哇！這些水晶好漂亮！",
-        dialog2: "小兔子：我要帶一塊回家，讓它每天都陪伴我！",
-        colorImage: "/blue-crystal-icon.png",    
-        titleImage: "/crystal-forest-title.png"  
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上找東西吃，突然 ── 牠看到一枚閃亮亮的硬幣！",
+        story2: "小雞眼睛一亮，心裡想：「哇～這麼多錢，我可以買好多、好～多好吃的蟲蟲耶！」",
+        story3: "於是，小雞跑去找媽媽問問看。 媽媽聽了點點頭說：『對呀～我正找那枚硬幣呢！』",
+        story4: "小雞開心地把錢還給媽媽，媽媽笑咪咪地說：『謝謝你，小雞！』小雞把錢還給媽媽，好開心呀～ 小朋友～你有沒有也做過一件誠實的事情呢？",
+        illustration: "/page1SS.png",
+        illustration2: "/bg2.png", // Optional second illustration
+        illustration3: "/bg3.png", // Optional third illustration
+        illustration4: "/bg4.png", // Optional fourth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        colorImage: "/cplan.png",    
+        titleImage: "/draw-09.png"  
       }
     },
     {
@@ -133,19 +133,19 @@ export default function Homepage2() {
       title: "Golden Horizon",
       diaryContent: {
         date: "2025/07/18",
-        title: "黃金城堡",
-        story: "太陽下山時，整座城堡變成了金黃色，小王子在陽台上看著美麗的夕陽。",
-        story2: "小王子決定在城堡裡舉辦一個派對，邀請所有的朋友來慶祝這美麗的時刻。",
-        story3: "派對上，小王子和朋友們一起跳舞、唱歌，享受著這個特別的夜晚。",
-        story4: "當夜晚結束時，小王子感謝大家的到來，並希望每個人都能記住這個美好的回憶。",
-        illustration: "/diary-castle.png",
-        illustration2: "/diary-castle2.png", // Optional second illustration
-        illustration3: "/diary-castle3.png", // Optional third illustration
-        illustration4: "/diary-castle4.png", // Optional fourth illustration
-        dialog: "小王子：哇！這座城堡在夕陽下真美！",
-        dialog2: "小王子：我要邀請所有朋友來這裡慶祝！",
-        colorImage: "/yellow-planet-icon.png",   
-        titleImage: "/golden-castle-title.png"  
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上找東西吃，突然 ── 牠看到一枚閃亮亮的硬幣！",
+        story2: "小雞眼睛一亮，心裡想：「哇～這麼多錢，我可以買好多、好～多好吃的蟲蟲耶！」",
+        story3: "於是，小雞跑去找媽媽問問看。 媽媽聽了點點頭說：『對呀～我正找那枚硬幣呢！』",
+        story4: "小雞開心地把錢還給媽媽，媽媽笑咪咪地說：『謝謝你，小雞！』小雞把錢還給媽媽，好開心呀～ 小朋友～你有沒有也做過一件誠實的事情呢？",
+        illustration: "/page1SS.png",
+        illustration2: "/bg2.png", // Optional second illustration
+        illustration3: "/bg3.png", // Optional third illustration
+        illustration4: "/bg4.png", // Optional fourth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        colorImage: "/yplan.png",   
+        titleImage: "/draw-09.png"  
       }
     },
   ] as const;
@@ -531,7 +531,11 @@ export default function Homepage2() {
               stiffness: 300,
               duration: 0.3
             }}
-            style={{ touchAction: 'auto' }} // Allow scrolling inside diary
+            style={{ touchAction: 'auto' }}
+            // Add these event handlers to prevent touch events from bubbling up
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
           >
             {/* Diary Header */}
             <div className="flex justify-between items-center px-6 py-4 border-b border-orange-200 flex-shrink-0">
@@ -547,7 +551,13 @@ export default function Homepage2() {
             </div>
 
             {/* Diary Content - This can scroll */}
-            <div className="flex-1 px-6 py-4 overflow-y-auto overscroll-contain">
+            <div 
+              className="flex-1 px-6 py-4 overflow-y-auto overscroll-contain"
+              // Additional safety - prevent touch events from this scrollable area
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
               {/* Date and Planet Indicator */}
               <motion.div
                 className="flex justify-between items-center mb-6"
