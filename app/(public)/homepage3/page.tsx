@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import CloseIcon from '@mui/icons-material/Close';
 
 /**
  * Direction union type for animation variants.
@@ -249,7 +250,7 @@ export default function Homepage2() {
         <AnimatePresence mode="wait">
           <motion.h1
             key={currentPlanet.title}
-            className="text-2xl font-bold text-white mt-6"
+            className="text-4xl font-bold text-white mt-10"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
@@ -460,7 +461,7 @@ export default function Homepage2() {
 
       {/* Enhanced Navigation Instructions */}
       <motion.div 
-        className="text-center text-white/60 text-sm pb-4 pt-10 flex-shrink-0"
+        className="text-center text-white/60 text-sm pb-4 pt-20 flex-shrink-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -477,7 +478,7 @@ export default function Homepage2() {
         >
           swipe up or down to explore planets
         </motion.p>
-        <div className="flex justify-center mt-4 space-x-3">
+        <div className="flex justify-center mt-40 space-x-3">
           {planets.map((planet, index) => (
             <motion.div
               key={index}
