@@ -24,12 +24,16 @@ interface Planet {
     story2: string; // Optional second story
     story3: string; // Optional third story
     story4: string; // Optional fourth story
+    story5?: string; // Optional fifth story
     illustration: string;
     illustration2: string; // Optional second illustration
     illustration3: string; // Optional third illustration
     illustration4: string; // Optional fourth illustration
+    illustration5: string; // Optional fifth illustration
     dialog: string; // New: dialog text for the diary
     dialog2: string; // New: second dialog text
+    dialog3?: string; // Optional third dialog text
+    dialog4?: string; // Optional fourth dialog text
     colorImage: string;      // New: image for color indicator
     titleImage: string;      // New: image for title block
   };
@@ -90,16 +94,20 @@ export default function Homepage2() {
       diaryContent: {
         date: "2025/07/20",
         title: "小雞檢硬幣",
-        story: "有一天，小雞在草地上找東西吃，突然 ── 牠看到一枚閃亮亮的硬幣！",
-        story2: "小雞眼睛一亮，心裡想：「哇～這麼多錢，我可以買好多、好～多好吃的蟲蟲耶！」",
-        story3: "於是，小雞跑去找媽媽問問看。 媽媽聽了點點頭說：『對呀～我正找那枚硬幣呢！』",
-        story4: "小雞開心地把錢還給媽媽，媽媽笑咪咪地說：『謝謝你，小雞！』小雞把錢還給媽媽，好開心呀～ 小朋友～你有沒有也做過一件誠實的事情呢？",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
         illustration: "/page1SS.png",
-        illustration2: "/bg2.png", // Optional second illustration
-        illustration3: "/bg3.png", // Optional third illustration
-        illustration4: "/bg4.png", // Optional fourth illustration
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
         dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
         dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "DearPlanet：是一枚有小雞圖案的硬幣喔",
         colorImage: "/b4-06.png",     
         titleImage: "/draw-09.png"     
       }
@@ -111,19 +119,23 @@ export default function Homepage2() {
       title: "Crystal World",
       diaryContent: {
         date: "2025/07/19",
-        title: "水晶森林",
-        story: "在水晶森林裡，每一片葉子都閃閃發光，小兔子發現了一個神秘的寶石洞穴。",
-        story2: "小兔子走進洞穴，裡面有各種顏色的水晶，牠決定帶一塊回家當作紀念。",
-        story3: "回到家後，小兔子把水晶放在窗台上，陽光照射下來，水晶發出美麗的光芒。",
-        story4: "小兔子每天都會看著水晶，牠相信這塊水晶會帶來好運。",
-        illustration: "/diary-crystal.png",
-        illustration2: "/diary-crystal2.png", // Optional second illustration
-        illustration3: "/diary-crystal3.png", // Optional third illustration
-        illustration4: "/diary-crystal4.png", // Optional fourth illustration
-        dialog: "小兔子：哇！這些水晶好漂亮！",
-        dialog2: "小兔子：我要帶一塊回家，讓它每天都陪伴我！",
-        colorImage: "/blue-crystal-icon.png",    
-        titleImage: "/crystal-forest-title.png"  
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
+        illustration: "/page1SS.png",
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "DearPlanet：是一枚有小雞圖案的硬幣喔",
+        colorImage: "/cplan.png",    
+        titleImage: "/draw-09.png"  
       }
     },
     {
@@ -133,19 +145,23 @@ export default function Homepage2() {
       title: "Golden Horizon",
       diaryContent: {
         date: "2025/07/18",
-        title: "黃金城堡",
-        story: "太陽下山時，整座城堡變成了金黃色，小王子在陽台上看著美麗的夕陽。",
-        story2: "小王子決定在城堡裡舉辦一個派對，邀請所有的朋友來慶祝這美麗的時刻。",
-        story3: "派對上，小王子和朋友們一起跳舞、唱歌，享受著這個特別的夜晚。",
-        story4: "當夜晚結束時，小王子感謝大家的到來，並希望每個人都能記住這個美好的回憶。",
-        illustration: "/diary-castle.png",
-        illustration2: "/diary-castle2.png", // Optional second illustration
-        illustration3: "/diary-castle3.png", // Optional third illustration
-        illustration4: "/diary-castle4.png", // Optional fourth illustration
-        dialog: "小王子：哇！這座城堡在夕陽下真美！",
-        dialog2: "小王子：我要邀請所有朋友來這裡慶祝！",
-        colorImage: "/yellow-planet-icon.png",   
-        titleImage: "/golden-castle-title.png"  
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
+        illustration: "/page1SS.png",
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
+        colorImage: "/yplan.png",   
+        titleImage: "/draw-09.png"  
       }
     },
   ] as const;
@@ -643,6 +659,45 @@ export default function Homepage2() {
                 </p>
               </motion.div>
 
+              {/* Speech Bubbles */}
+              <motion.div
+                className="space-y-4 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+        
+              {/* Answer Speech Bubble */}
+              <div className="flex justify-end">
+                <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {currentPlanet.diaryContent.dialog3}
+                  </p>
+                  {/* Speech bubble tail pointing right */}
+                  <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
+                  </div>
+                </div>
+              </div>
+
+              <span className="text-sm font-bold text-gray-700 ">
+                DearPlanet
+              </span>
+
+              {/* Question Speech Bubble */}
+              <div className="flex justify-start">
+                <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {currentPlanet.diaryContent.dialog4}
+                  </p>
+                  {/* Speech bubble tail pointing left */}
+                  <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
+                  </div>
+                </div>
+              </div>
+              </motion.div>
+
               {/* Story Illustration2 */}
               <motion.div
                 className="rounded-2xl mb-6 min-h-[200px] flex items-center 
@@ -672,6 +727,35 @@ export default function Homepage2() {
                 </p>
               </motion.div>
 
+              {/* Story Illustration3 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidde"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={currentPlanet.diaryContent.illustration3}
+                  alt={currentPlanet.diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text2 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {currentPlanet.diaryContent.story3}
+                </p>
+              </motion.div>
+
               {/* Story Text with Speech Bubbles */}
               <motion.div
                 className="space-y-4 mb-6"
@@ -679,6 +763,11 @@ export default function Homepage2() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
               >
+
+              <span className="text-sm font-bold text-gray-700 ">
+                DearPlanet
+              </span>
+
               {/* Question Speech Bubble */}
               <div className="flex justify-start">
                 <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
@@ -706,35 +795,6 @@ export default function Homepage2() {
               </div>
               </motion.div>
 
-              {/* Story Illustration3 */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidde"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={currentPlanet.diaryContent.illustration3}
-                  alt={currentPlanet.diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                />
-              </motion.div>
-
-              {/* Story Text3 */}
-              <motion.div
-                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {currentPlanet.diaryContent.story3}
-                </p>
-              </motion.div>
-
               {/* Story Illustration4 */}
               <motion.div
                 className="rounded-2xl mb-6 min-h-[200px] flex items-center 
@@ -752,7 +812,7 @@ export default function Homepage2() {
                 />
               </motion.div>
 
-              {/* Story Text2 */}
+              {/* Story Text3 */}
               <motion.div
                 className="bg-white rounded-2xl p-6 shadow-sm mb-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -763,6 +823,40 @@ export default function Homepage2() {
                   {currentPlanet.diaryContent.story4}
                 </p>
               </motion.div>
+
+              {/* Story Illustration5 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidde"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={currentPlanet.diaryContent.illustration5}
+                  alt={currentPlanet.diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text2 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {currentPlanet.diaryContent.story5}
+                </p>
+              </motion.div>
+
+              <p className="text-gray-800 leading-relaxed text-base font-bold">
+                ----------------故事結束----------------
+              </p>
+
 
             </div>
           </motion.div>
