@@ -40,7 +40,45 @@ export default function Homepage2() {
   const [isPressed, setIsPressed] = useState(false);
   const [currentPlanetIndex, setCurrentPlanetIndex] = useState(0);
   const [exitDirection, setExitDirection] = useState<Direction>("down");
-  const [isDiaryOpen, setIsDiaryOpen] = useState(false); // New state for diary popup
+  const [isDiaryOpen, setIsDiaryOpen] = useState(false);
+  
+  // Add touch state
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // ------------------------- touch handlers -------------------------
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
+    setTouchStart(e.targetTouches[0].clientY);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isUpSwipe = distance > 50;
+    const isDownSwipe = distance < -50;
+
+    if (isUpSwipe) {
+      // Swipe up - go to previous planet
+      setExitDirection("up");
+      setTimeout(() => {
+        setCurrentPlanetIndex((prev) => (prev === 0 ? planets.length - 1 : prev - 1));
+      }, 50);
+    }
+    
+    if (isDownSwipe) {
+      // Swipe down - go to next planet
+      setExitDirection("down");
+      setTimeout(() => {
+        setCurrentPlanetIndex((prev) => (prev === planets.length - 1 ? 0 : prev + 1));
+      }, 50);
+    }
+  };
 
   // ------------------------- data -------------------------
   const planets: readonly Planet[] = [
@@ -56,14 +94,14 @@ export default function Homepage2() {
         story2: "小雞眼睛一亮，心裡想：「哇～這麼多錢，我可以買好多、好～多好吃的蟲蟲耶！」",
         story3: "於是，小雞跑去找媽媽問問看。 媽媽聽了點點頭說：『對呀～我正找那枚硬幣呢！』",
         story4: "小雞開心地把錢還給媽媽，媽媽笑咪咪地說：『謝謝你，小雞！』小雞把錢還給媽媽，好開心呀～ 小朋友～你有沒有也做過一件誠實的事情呢？",
-        illustration: "/bg1.png",
+        illustration: "/page1SS.png",
         illustration2: "/bg2.png", // Optional second illustration
         illustration3: "/bg3.png", // Optional third illustration
         illustration4: "/bg4.png", // Optional fourth illustration
         dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
         dialog2: "我會問媽媽是不是她的",
         colorImage: "/b4-06.png",     
-        titleImage: "/chicken.png"     
+        titleImage: "/draw-09.png"     
       }
     },
     {
@@ -145,6 +183,7 @@ export default function Homepage2() {
       transition: {
         duration: 0.9,
         // ease: [0.25, 0.46, 0.45, 0.94],
+        // ease: "easeInOut", // Changed to easeInOut for smoother transition
         ease: "linear",
         times: [0, 0.3, 0.6, 0.8, 1],
       },
@@ -198,7 +237,12 @@ export default function Homepage2() {
 
   // ------------------------- render -------------------------
   return (
-    <div className="flex flex-col h-full px-6 py-4 overflow-hidden">
+    <div 
+      className="flex flex-col h-full px-6 py-4 overflow-hidden"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       {/* Header */}
       <div className="flex justify-center items-center mb-4 mt-4">
         <AnimatePresence mode="wait">
@@ -381,23 +425,35 @@ export default function Homepage2() {
           {planets.map((planet, index) => (
             <motion.div
               key={index}
-              className={`w-3 h-3 rounded-full border-2 ${
+              className={`w-3 h-3 rounded-full border-2 cursor-pointer ${
                 index === currentPlanetIndex 
                   ? 'bg-white border-white' 
                   : 'bg-transparent border-white/30'
               }`}
+              onClick={() => {
+                if (index !== currentPlanetIndex) {
+                  setExitDirection(index > currentPlanetIndex ? "down" : "up");
+                  setTimeout(() => {
+                    setCurrentPlanetIndex(index);
+                  }, 50);
+                }
+              }}
               animate={{
                 scale: index === currentPlanetIndex ? 1.3 : 1,
                 backgroundColor: index === currentPlanetIndex ? planet.color : 'transparent',
                 borderColor: index === currentPlanetIndex ? planet.color : 'rgba(255,255,255,0.3)'
               }}
               transition={{ 
-                duration: 0.4, 
+                duration: 0.1, 
                 ease: [0.25, 0.46, 0.45, 0.94] 
               }}
               whileHover={{
                 scale: 1.2,
                 transition: { duration: 0.2 }
+              }}
+              whileTap={{
+                scale: 1.1,
+                transition: { duration: 0.1 }
               }}
             />
           ))}
