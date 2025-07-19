@@ -239,7 +239,7 @@ export default function Homepage2() {
   // ------------------------- render -------------------------
   return (
     <div 
-      className="flex flex-col h-screen w-screen px-6 py-4 overflow-hidden fixed inset-0"
+      className="flex flex-col h-screen w-screen px-0 py-0 overflow-hidden fixed inset-0"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -548,7 +548,7 @@ export default function Homepage2() {
             onTouchEnd={(e) => e.stopPropagation()}
           >
             {/* Diary Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-orange-200 flex-shrink-0">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
               <motion.button  
                 onClick={() => setIsDiaryOpen(false)}
@@ -556,7 +556,7 @@ export default function Homepage2() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <span className="text-2xl text-black-800">×</span>
+                <CloseIcon className="text-gray-800" fontSize="large" />
               </motion.button>
             </div>
 
