@@ -536,7 +536,7 @@ export default function Homepage2() {
             }}
           >
             {/* Diary Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-orange-200">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
               <motion.button  
                 onClick={() => setIsDiaryOpen(false)}
@@ -572,6 +572,10 @@ export default function Homepage2() {
                 </div>
               </motion.div>
 
+              <span className="text-lg font-bold text-gray-700">
+                孩童的畫作：
+              </span>
+
               {/* Story Title */}
               <motion.div
                 className="rounded-2xl mb-6 overflow-hidden"
@@ -587,6 +591,28 @@ export default function Homepage2() {
                   className="w-full h-auto object-cover rounded-2xl"
                 />
               </motion.div>
+
+              <span className="text-lg font-bold text-gray-700">
+                今日觀察：
+              </span>
+
+              <motion.div
+                className="bg-red-100 rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  今日故事提及拾金不昧概念，鼓勵小朋友誠實守信。
+                  孩童也在故事間選擇了正確的行為，展現了誠實的美德。
+                  往後也可深化關於誠實、、守信的問題討論。
+                </p>
+              </motion.div>
+
+              <span className="text-lg font-bold text-gray-700">
+                故事回顧：
+              </span>
+
 
               {/* Story Illustration */}
               <motion.div
