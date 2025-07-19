@@ -243,10 +243,10 @@ export default function Homepage2() {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      style={{ touchAction: 'none' }} // Prevent default touch behaviors
+      style={{ touchAction: 'none' }}
     >
       {/* Header */}
-      <div className="flex justify-center items-center mb-4 mt-4 flex-shrink-0">
+      <div className="flex justify-center items-center mb-4 mt-10 flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.h1
             key={currentPlanet.title}
@@ -262,7 +262,7 @@ export default function Homepage2() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex items-center justify-center pt-26 overflow-hidden">
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
         <div className="relative w-80 h-80 flex items-center justify-center">
           <motion.div
             className="cursor-pointer relative"
@@ -459,9 +459,9 @@ export default function Homepage2() {
         </div>
       </div>
 
-      {/* Enhanced Navigation Instructions */}
+      {/* Navigation Instructions - Moved to separate section */}
       <motion.div 
-        className="text-center text-white/60 text-sm pb-4 pt-20 flex-shrink-0"
+        className="text-center text-white/60 text-sm flex-shrink-0 font-bold"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -478,7 +478,16 @@ export default function Homepage2() {
         >
           swipe up or down to explore planets
         </motion.p>
-        <div className="flex justify-center mt-40 space-x-3">
+      </motion.div>
+
+      {/* Navigation Dots - Now at the bottom */}
+      <motion.div 
+        className="flex justify-center items-center pb-8 pt-4 flex-shrink-0 mb-30"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="flex justify-center space-x-3">
           {planets.map((planet, index) => (
             <motion.div
               key={index}
