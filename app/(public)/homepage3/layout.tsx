@@ -38,7 +38,7 @@ export default function HomepageLayout({
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-900 via-purple-900 to-purple-800 flex flex-col rounded-3xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-950 via-violet-950 to-purple-950 flex flex-col rounded-3xl overflow-hidden">
       {/* Main Content */}
       <div className="flex-1">
         {children}
