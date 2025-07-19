@@ -238,17 +238,18 @@ export default function Homepage2() {
   // ------------------------- render -------------------------
   return (
     <div 
-      className="flex flex-col h-full px-6 py-4 overflow-hidden"
+      className="flex flex-col h-screen w-screen px-6 py-4 overflow-hidden fixed inset-0"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      style={{ touchAction: 'none' }} // Prevent default touch behaviors
     >
       {/* Header */}
-      <div className="flex justify-center items-center mb-4 mt-4">
+      <div className="flex justify-center items-center mb-4 mt-4 flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.h1
             key={currentPlanet.title}
-            className="text-2xl font-bold text-white"
+            className="text-2xl font-bold text-white mt-6"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
@@ -260,7 +261,7 @@ export default function Homepage2() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex items-center justify-center pt-26">
+      <div className="flex-1 flex items-center justify-center pt-26 overflow-hidden">
         <div className="relative w-80 h-80 flex items-center justify-center">
           <motion.div
             className="cursor-pointer relative"
@@ -343,11 +344,7 @@ export default function Homepage2() {
                     style={{
                       zIndex: 2,
                       background: `
-                        radial-gradient(ellipse 100px 70px at 25% 20%, 
-                        rgba(255, 255, 255, 0.4) 0%, 
-                        rgba(255, 255, 255, 0.3) 30%, 
-                        rgba(255, 255, 255, 0.1) 60%, 
-                        rgba(255, 255, 255, 0) 100%)
+                        radial-gradient(ellipse 100px 70px at 25% 20%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%)
                       `,
                     }}
                   />
@@ -360,7 +357,7 @@ export default function Homepage2() {
                       background: `
                         radial-gradient(
                         ellipse 50px 30px at 30% 15%, 
-                        rgba(255, 255, 255, 0.6) 0%, 
+                        rgba(255, 255, 255, 0.8) 0%, 
                         rgba(255, 255, 255, 0.4) 40%, 
                         rgba(255, 255, 255, 0) 80%)
                       `,
@@ -369,15 +366,15 @@ export default function Homepage2() {
 
                   {/* Shadow area - bottom right */}
                   <div
-                    className="absolute mix-blend-darken bg-blend-darken inset-0 rounded-full pointer-events-none"
+                    className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
                       zIndex: 4,
                       background: `
                         radial-gradient(
-                        ellipse 200px 200px at 75% 80%, 
-                        rgba(0, 0, 0, 0.4) 0%, 
-                        rgba(0, 0, 0, 0.3) 40%, 
-                        rgba(0, 0, 0, 0.1) 70%, 
+                        ellipse 140px 120px at 75% 80%, 
+                        rgba(0, 0, 0, 0.25) 0%, 
+                        rgba(0, 0, 0, 0.15) 40%, 
+                        rgba(0, 0, 0, 0.05) 70%, 
                         rgba(0, 0, 0, 0) 100%
                         )
                       `,
@@ -463,7 +460,7 @@ export default function Homepage2() {
 
       {/* Enhanced Navigation Instructions */}
       <motion.div 
-        className="text-center text-white/60 text-sm pb-4 pt-10"
+        className="text-center text-white/60 text-sm pb-4 pt-10 flex-shrink-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -523,7 +520,7 @@ export default function Homepage2() {
       <AnimatePresence>
         {isDiaryOpen && (
           <motion.div
-            className="fixed top-16 left-4 right-4 bottom-4 
+            className="fixed top-4 left-4 right-4 bottom-4 
             bg-gray-50 rounded-3xl z-50 flex flex-col shadow-2xl"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -534,9 +531,10 @@ export default function Homepage2() {
               stiffness: 300,
               duration: 0.3
             }}
+            style={{ touchAction: 'auto' }} // Allow scrolling inside diary
           >
             {/* Diary Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-orange-200">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-orange-200 flex-shrink-0">
               <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
               <motion.button  
                 onClick={() => setIsDiaryOpen(false)}
@@ -548,8 +546,8 @@ export default function Homepage2() {
               </motion.button>
             </div>
 
-            {/* Diary Content */}
-            <div className="flex-1 px-6 py-4 overflow-y-auto">
+            {/* Diary Content - This can scroll */}
+            <div className="flex-1 px-6 py-4 overflow-y-auto overscroll-contain">
               {/* Date and Planet Indicator */}
               <motion.div
                 className="flex justify-between items-center mb-6"
