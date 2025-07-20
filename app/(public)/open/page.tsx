@@ -26,7 +26,7 @@ export default function OpeningPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push('/homepage3');
-    }, 3000); // 3 seconds
+    }, 5000); // 3 seconds
 
     return () => clearTimeout(timer);
   }, [router]);
@@ -53,8 +53,8 @@ export default function OpeningPage() {
                 priority
               />
             </div>
-            <h2 className="text-2xl text-white/80 font-light">
-              Exploring the kids' imagination
+            <h2 className="text-2xl text-white/80 font-bold">
+              Exploring Kid's Imagination
             </h2>
           </motion.div>
 
@@ -162,9 +162,9 @@ export default function OpeningPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div className="flex flex-col h-screen w-screen overflow-hidden fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-3xl">
       {/* Background Stars Effect - Only render on client */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 rounded-3xl">
         {stars.map((star, i) => (
           <motion.div
             key={i}
@@ -204,8 +204,8 @@ export default function OpeningPage() {
               priority
             />
           </div>
-          <h2 className="text-2xl text-white/80 font-light">
-            Exploring the kids' imagination
+          <h2 className="text-2xl text-white/80 font-bold">
+            Exploring Kid's Imagination
           </h2>
         </motion.div>
 
@@ -289,7 +289,7 @@ export default function OpeningPage() {
         className="absolute bottom-8 left-8 right-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.5 }}
+        transition={{ delay: 2, duration: 1 }}
       >
         <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
           <motion.div
