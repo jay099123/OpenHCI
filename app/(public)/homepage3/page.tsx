@@ -91,7 +91,7 @@ export default function Homepage2() {
       name: "Red Planet",
       image: "/b4-06.png",
       color: "#ef4444",
-      title: "誠實星球",
+      title: "禮貌星球",
       diaryContent: {
         date: "2025/07/20",
         title: "小雞檢硬幣",
@@ -117,7 +117,7 @@ export default function Homepage2() {
       name: "Crystal Planet",
       image: "/cplan.png",
       color: "#06b6d4",
-      title: "禮貌星球",
+      title: "誠實星球",
       diaryContent: {
         date: "2025/07/19",
         title: "小雞檢硬幣",

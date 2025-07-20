@@ -54,7 +54,7 @@ export default function OpeningPage() {
               />
             </div>
             <h2 className="text-2xl text-white/80 font-bold">
-              Exploring Kid's Imagination
+              Diving Into Kid's Imagination
             </h2>
           </motion.div>
 
@@ -205,7 +205,7 @@ export default function OpeningPage() {
             />
           </div>
           <h2 className="text-2xl text-white/80 font-bold">
-            Exploring Kid's Imagination
+            Diving Into Kid's Imagination
           </h2>
         </motion.div>
 
