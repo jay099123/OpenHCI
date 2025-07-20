@@ -133,7 +133,7 @@ export default function Homepage2() {
         dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
         dialog2: "我會問媽媽是不是她的",
         dialog3: "是什麼硬幣！",
-        dialog4: "DearPlanet：是一枚有小雞圖案的硬幣喔",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
         colorImage: "/cplan.png",    
         titleImage: "/draw-09.png"  
       }

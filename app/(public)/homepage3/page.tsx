@@ -91,7 +91,7 @@ export default function Homepage2() {
       name: "Red Planet",
       image: "/b4-06.png",
       color: "#ef4444",
-      title: "Mars Explorer",
+      title: "誠實星球",
       diaryContent: {
         date: "2025/07/20",
         title: "小雞檢硬幣",
@@ -117,7 +117,7 @@ export default function Homepage2() {
       name: "Crystal Planet",
       image: "/cplan.png",
       color: "#06b6d4",
-      title: "Crystal World",
+      title: "禮貌星球",
       diaryContent: {
         date: "2025/07/19",
         title: "小雞檢硬幣",
@@ -134,7 +134,7 @@ export default function Homepage2() {
         dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
         dialog2: "我會問媽媽是不是她的",
         dialog3: "是什麼硬幣！",
-        dialog4: "DearPlanet：是一枚有小雞圖案的硬幣喔",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
         colorImage: "/cplan.png",    
         titleImage: "/draw-09.png"  
       }
@@ -143,7 +143,7 @@ export default function Homepage2() {
       name: "Yellow Planet",
       image: "/yplan.png",
       color: "#f59e0b",
-      title: "Golden Horizon",
+      title: "開心星球",
       diaryContent: {
         date: "2025/07/18",
         title: "小雞檢硬幣",
@@ -492,7 +492,7 @@ export default function Homepage2() {
             ease: "easeInOut" 
           }}
         >
-          swipe up or down to explore planets
+          上下滑探索星球！
         </motion.p>
       </motion.div>
 

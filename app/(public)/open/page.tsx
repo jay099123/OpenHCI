@@ -22,11 +22,11 @@ export default function OpeningPage() {
     setStars(starArray);
   }, []);
 
-//   Auto redirect after 3 seconds
+//   Auto redirect after 4 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push('/homepage3');
-    }, 5000); // 3 seconds
+    }, 4000); // 4 seconds
 
     return () => clearTimeout(timer);
   }, [router]);
