@@ -266,7 +266,7 @@ export default function Homepage2() {
         <AnimatePresence mode="wait">
           <motion.h1
             key={currentPlanet.title}
-            className="text-4xl font-bold text-white mt-10"
+            className="text-3xl font-bold text-white mt-10 "
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
