@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import CloseIcon from '@mui/icons-material/Close';
-import { usePlanets, PlanetWithStory } from "@/hooks/usePlanets";
 
+/**
+ * Direction union type for animation variants.
+ */
 type Direction = "up" | "down";
 
 /**
@@ -40,84 +42,184 @@ interface Planet {
 
 export default function Homepage2() {
   // ------------------------- state -------------------------
-  const { planets, loading, error } = usePlanets();
-  
+  const [isPressed, setIsPressed] = useState(false);
   const [currentPlanetIndex, setCurrentPlanetIndex] = useState(0);
   const [exitDirection, setExitDirection] = useState<Direction>("down");
   const [isDiaryOpen, setIsDiaryOpen] = useState(false);
+  
+  // Add touch state
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [isPressed, setIsPressed] = useState(false);
 
-  // ✅ Handle early returns AFTER all hooks
-  if (loading) {
-    return (
-      <div className="flex flex-col h-screen w-screen items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <motion.div
-          className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        />
-        <p className="text-white mt-4">載入星球中...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col h-screen w-screen items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <p className="text-red-400 text-center px-6">
-          載入失敗: {error}
-        </p>
-        <button 
-          onClick={() => window.location.reload()}
-          className="mt-4 px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors"
-        >
-          重新載入
-        </button>
-      </div>
-    );
-  }
-
-  if (planets.length === 0) {
-    return (
-      <div className="flex flex-col h-screen w-screen items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <p className="text-white text-center px-6">
-          目前沒有可用的星球故事
-        </p>
-      </div>
-    );
-  }
-
-  // ✅ Safe to access planets now
-  const currentPlanet = planets[currentPlanetIndex];
-
-  // Fallback content
-  const fallbackContent = {
-    date: "2025/07/24",
-    title: "Loading...",
-    story: "故事加載中...",
-    story2: "故事加載中...",
-    story3: "故事加載中...",
-    story4: "故事加載中...",
-    story5: "故事加載中...",
-    illustration: "/placeholder.png",
-    illustration2: "/placeholder.png",
-    illustration3: "/placeholder.png",
-    illustration4: "/placeholder.png",
-    illustration5: "/placeholder.png",
-    dialog: "加載中...",
-    dialog2: "加載中...",
-    dialog3: "加載中...",
-    dialog4: "加載中...",
-    colorImage: "/placeholder.png",
-    titleImage: "/placeholder.png"
+  // ------------------------- touch handlers -------------------------
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
+    setTouchStart(e.targetTouches[0].clientY);
   };
 
-  // Use safe content
-  const diaryContent = currentPlanet?.diaryContent || fallbackContent;
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
 
-  // Animation variants
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isUpSwipe = distance > 50;
+    const isDownSwipe = distance < -50;
+
+    if (isUpSwipe) {
+      // Swipe up - go to previous planet
+      setExitDirection("up");
+      setTimeout(() => {
+        setCurrentPlanetIndex((prev) => (prev === 0 ? planets.length - 1 : prev - 1));
+      }, 50);
+    }
+    
+    if (isDownSwipe) {
+      // Swipe down - go to next planet
+      setExitDirection("down");
+      setTimeout(() => {
+        setCurrentPlanetIndex((prev) => (prev === planets.length - 1 ? 0 : prev + 1));
+      }, 50);
+    }
+  };
+
+  // ------------------------- data -------------------------
+  const planets: readonly Planet[] = [
+    {
+      name: "Red Planet",
+      image: "/b4-06.png",
+      color: "#ef4444",
+      title: "禮貌星球",
+      diaryContent: {
+        date: "2025/07/20",
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
+        illustration: "/page1SS.png",
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
+        colorImage: "/b4-06.png",     
+        titleImage: "/draw-09.png"     
+      }
+    },
+    {
+      name: "Crystal Planet",
+      image: "/cplan.png",
+      color: "#06b6d4",
+      title: "誠實星球",
+      diaryContent: {
+        date: "2025/07/19",
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
+        illustration: "/page1SS.png",
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
+        colorImage: "/cplan.png",    
+        titleImage: "/draw-09.png"  
+      }
+    },
+    {
+      name: "Yellow Planet",
+      image: "/yplan.png",
+      color: "#f59e0b",
+      title: "開心星球",
+      diaryContent: {
+        date: "2025/07/18",
+        title: "小雞檢硬幣",
+        story: "有一天，小雞在草地上覓食，忽然發現一枚閃亮的硬幣！",
+        story2: "小雞眼睛一亮，心想：『哇～這麼多錢，我可以買好多好吃的蟲蟲耶！』",
+        story3: "這時，小雞看到媽媽在找東西，好像在呼喚牠……",
+        story4: "小雞看著硬幣，想：『剛剛好像有看到媽媽在找東西？這是媽媽掉的嗎？』",
+        story5: "小雞跑去問媽媽，媽媽點點頭：『對呀，我在找這枚硬幣。』小雞把錢還給媽媽，媽媽笑著說：『謝謝你！』",
+        illustration: "/page1SS.png",
+        illustration2: "/p2.png", // Optional second illustration
+        illustration3: "/p3.png", // Optional third illustration
+        illustration4: "/p4.png", // Optional fourth illustration
+        illustration5: "/p5.png", // Optional fifth illustration
+        dialog: "小朋友～你覺得，小雞現在應該怎麼辦呢？",
+        dialog2: "我會問媽媽是不是她的",
+        dialog3: "是什麼硬幣！",
+        dialog4: "是一枚有小雞圖案的硬幣喔",
+        colorImage: "/yplan.png",   
+        titleImage: "/draw-09.png"  
+      }
+    },
+  ] as const;
+
+  const currentPlanet = planets[currentPlanetIndex];
+
+  // ------------------------- keyboard navigation -------------------------
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp") {
+        setExitDirection("up");
+        setTimeout(() => {
+          setCurrentPlanetIndex((prev) => (prev === 0 ? planets.length - 1 : prev - 1));
+        }, 50);
+      } else if (event.key === "ArrowDown") {
+        setExitDirection("down");
+        setTimeout(() => {
+          setCurrentPlanetIndex((prev) => (prev === planets.length - 1 ? 0 : prev + 1));
+        }, 50);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
+
+  // ------------------------- semicircle animation variants -------------------------
+  const exitVariants: Record<Direction, any> = {
+    up: {
+      x: [0,  120, 220, 280, 320],
+      y: [0, -80, -160, -220, -280],
+      opacity: [1, 0.9, 0.7, 0.3, 0],
+      scale: [1, 0.9, 0.7, 0.4, 0.1],
+      rotate: [0, 15, 30, 50, 70],
+      transition: {
+        duration: 0.9,
+        // ease: [0.25, 0.46, 0.45, 0.94],
+        // ease: "easeInOut", // Changed to easeInOut for smoother transition
+        ease: "linear",
+        times: [0, 0.3, 0.6, 0.8, 1],
+      },
+    },
+    down: {
+      x: [0, 120, 220, 280, 320],
+      y: [0, 80, 160, 220, 280],
+      opacity: [1, 0.9, 0.7, 0.3, 0],
+      scale: [1, 0.9, 0.7, 0.4, 0.1],
+      rotate: [0, -15, -30, -50, -70],
+      transition: {
+        duration: 0.9,
+        // ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "linear", 
+        times: [0, 0.3, 0.6, 0.8, 1],
+      },
+    },
+  };
+
   const enterVariants: Record<Direction, any> = {
     up: {
       x: [320, 280, 220, 120, 0],
@@ -145,95 +247,12 @@ export default function Homepage2() {
     },
   };
 
-  // Update the exit variants to match the original:
-  const exitVariants: Record<Direction, any> = {
-    up: {
-      x: [0, 120, 220, 280, 320],
-      y: [0, -80, -160, -220, -280],
-      opacity: [1, 0.9, 0.7, 0.3, 0],
-      scale: [1, 0.9, 0.7, 0.4, 0.1],
-      rotate: [0, 15, 30, 50, 70],
-      transition: {
-        duration: 0.9,
-        ease: "linear",
-        times: [0, 0.3, 0.6, 0.8, 1],
-      },
-    },
-    down: {
-      x: [0, 120, 220, 280, 320],
-      y: [0, 80, 160, 220, 280],
-      opacity: [1, 0.9, 0.7, 0.3, 0],
-      scale: [1, 0.9, 0.7, 0.4, 0.1],
-      rotate: [0, -15, -30, -50, -70],
-      transition: {
-        duration: 0.9,
-        ease: "linear", 
-        times: [0, 0.3, 0.6, 0.8, 1],
-      },
-    },
-  };
-
-  // Touch handlers
-  const onTouchStart = (e: React.TouchEvent) => {
-    if (isDiaryOpen) return; // Add this check
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientY);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (isDiaryOpen) return; // Add this check
-    setTouchEnd(e.targetTouches[0].clientY);
-  };
-
-  const onTouchEnd = () => {
-    if (isDiaryOpen) return; // Add this check
-    if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isUpSwipe = distance > 50;
-    const isDownSwipe = distance < -50;
-
-    if (isUpSwipe) {
-      setExitDirection("up");
-      setTimeout(() => {
-        setCurrentPlanetIndex((prev) => (prev === 0 ? planets.length - 1 : prev - 1));
-      }, 50);
-    }
-    
-    if (isDownSwipe) {
-      setExitDirection("down");
-      setTimeout(() => {
-        setCurrentPlanetIndex((prev) => (prev === planets.length - 1 ? 0 : prev + 1));
-      }, 50);
-    }
-  };
-
+  // Handle planet click to open diary
   const handlePlanetClick = () => {
     setIsDiaryOpen(true);
   };
 
-  // Enhanced styling function
-  const getPlanetStyling = (planet: PlanetWithStory, index: number) => {
-    const colors = {
-      politeness_planet: "#ef4444",
-      honesty_planet: "#22c55e", 
-      kindness_planet: "#3b82f6",
-      default: planet.color || "#8b5cf6"
-    };
-
-    const color = colors[planet.id as keyof typeof colors] || colors.default;
-    
-    return {
-      background: `linear-gradient(135deg, ${color}66, ${color}99)`,
-      boxShadow: `
-        0 20px 40px rgba(0, 0, 0, 0.2),
-        0 0 80px ${color}40,
-        inset 0 0 120px rgba(255, 255, 255, 0.1)
-      `,
-      border: `2px solid ${color}80`,
-    };
-  };
-
+  // ------------------------- render -------------------------
   return (
     <div 
       className="flex flex-col h-screen w-screen px-0 py-0 overflow-hidden fixed inset-0"
@@ -242,62 +261,33 @@ export default function Homepage2() {
       onTouchEnd={onTouchEnd}
       style={{ touchAction: 'none' }}
     >
-      {/* Background Stars Animation */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full opacity-60"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0.5, 1.5, 0.5],
-              opacity: [0.3, 1, 0.3],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
       {/* Header */}
-      <div className="flex justify-center items-center mb-4 mt-4 flex-shrink-0 relative z-10">
+      <div className="flex justify-center items-center mb-4 mt-10 flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.h1
-            key={currentPlanet?.title || 'loading'}
-            className="text-4xl font-bold text-white mt-10"
-            style={{
-              textShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-              background: 'linear-gradient(45deg, #ffffff, #f0f0f0)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
+            key={currentPlanet.title}
+            className="text-3xl font-bold text-white mt-10 "
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           >
-            {currentPlanet?.title || 'Loading...'}
+            {currentPlanet.title}
           </motion.h1>
         </AnimatePresence>
       </div>
 
-      {/* Planet with Enhanced Styling */}
-      <div className="flex-1 flex items-center justify-center relative z-10">
+      {/* Main Content Area */}
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
         <div className="relative w-80 h-80 flex items-center justify-center">
           <motion.div
             className="cursor-pointer relative"
-            onTouchStart={() => setIsPressed(true)}
-            onTouchEnd={() => {
+            onTapStart={() => setIsPressed(true)}
+            onTap={() => {
               setIsPressed(false);
-              handlePlanetClick();
+              handlePlanetClick(); // Open diary on tap
             }}
+            onTapCancel={() => setIsPressed(false)}
             whileHover={{ 
               scale: 1.05,
               transition: { duration: 0.3, ease: "easeOut" }
@@ -311,8 +301,7 @@ export default function Homepage2() {
               <motion.div
                 key={currentPlanetIndex}
                 className="relative"
-                variants={enterVariants}
-                initial={exitDirection}
+                initial={enterVariants[exitDirection]}
                 animate={{
                   opacity: 1,
                   scale: 1,
@@ -324,13 +313,7 @@ export default function Homepage2() {
                     ease: [0.25, 0.46, 0.45, 0.94],
                   }
                 }}
-                exit={{
-                  x: exitDirection === "up" ? 320 : 320,
-                  y: exitDirection === "up" ? -280 : 280,
-                  opacity: 0,
-                  scale: 0.1,
-                  rotate: exitDirection === "up" ? 70 : -70,
-                }}
+                exit={exitVariants[exitDirection]}
               >
                 {/* Planet - Enhanced with 3D Lighting */}
                 <motion.div
@@ -347,8 +330,8 @@ export default function Homepage2() {
                       inset 15px -15px 40px -10px rgba(0, 0, 0, 0.5),
                       inset -15px 15px 30px -5px rgba(255, 255, 255, 0.3),
                       inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-                      -5px 0px 10px -4px ${currentPlanet?.color}, 
-                      0px 0px 40px ${currentPlanet?.color}66
+                      -5px 0px 10px -4px ${currentPlanet.color}, 
+                      0px 0px 40px ${currentPlanet.color}66
                     `,
                   }}
                 >
@@ -358,7 +341,7 @@ export default function Homepage2() {
                       height: "100%",
                       width: "100%",
                       zIndex: 1,
-                      backgroundImage: `url('${currentPlanet?.image}')`,
+                      backgroundImage: `url('${currentPlanet.image}')`,
                       backgroundSize: "200% 100%",
                       backgroundRepeat: "repeat-x",
                       transform: "rotate(15deg) scale(1.2)",
@@ -432,7 +415,7 @@ export default function Homepage2() {
                   className="absolute inset-0 rounded-full pointer-events-none"
                   style={{
                     transform: "scale(1.2)",
-                    background: `radial-gradient(circle, ${currentPlanet?.color}4D 0%, transparent 70%)`,
+                    background: `radial-gradient(circle, ${currentPlanet.color}4D 0%, transparent 70%)`,
                     filter: "blur(20px)",
                     zIndex: 0,
                   }}
@@ -456,10 +439,10 @@ export default function Homepage2() {
               style={{ 
                 transform: "scale(1.4)", 
                 zIndex: -1, 
-                borderColor: `${currentPlanet?.color}60`
+                borderColor: `${currentPlanet.color}60` // Made more visible
               }}
               animate={{ 
-                opacity: [0.6, 0.9, 0.6],
+                opacity: [0.6, 0.9, 0.6], // Always visible, just pulsing brightness
                 scale: [1.4, 1.5, 1.4],
                 rotate: [0, 360]
               }}
@@ -475,10 +458,10 @@ export default function Homepage2() {
               style={{
                 transform: "scale(1.7)",
                 zIndex: -2,
-                borderColor: `${currentPlanet?.color}40`,
+                borderColor: `${currentPlanet.color}40`, // Made more visible
               }}
               animate={{
-                opacity: [0.4, 0.7, 0.4],
+                opacity: [0.4, 0.7, 0.4], // Always visible, just pulsing brightness
                 scale: [1.7, 1.8, 1.7],
                 rotate: [360, 0]
               }}
@@ -490,28 +473,6 @@ export default function Homepage2() {
             />
           </motion.div>
         </div>
-      </div>
-
-      {/* Planet Navigation Dots */}
-      <div className="flex justify-center space-x-3 mb-8 relative z-10">
-        {planets.map((_, index) => (
-          <motion.button
-            key={index}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentPlanetIndex 
-                ? 'bg-white shadow-lg' 
-                : 'bg-white/40 hover:bg-white/60'
-            }`}
-            onClick={() => setCurrentPlanetIndex(index)}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.8 }}
-            style={{
-              boxShadow: index === currentPlanetIndex 
-                ? `0 0 20px ${currentPlanet?.color}80` 
-                : 'none'
-            }}
-          />
-        ))}
       </div>
 
       {/* Navigation Instructions - Moved to separate section */}
@@ -597,29 +558,33 @@ export default function Homepage2() {
               duration: 0.3
             }}
             style={{ touchAction: 'auto' }}
+            // Add these event handlers to prevent touch events from bubbling up
             onTouchStart={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
-            <motion.button
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full 
-              shadow-lg flex items-center justify-center text-gray-600 hover:text-gray-800"
-              onClick={() => setIsDiaryOpen(false)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <CloseIcon fontSize="small" />
-            </motion.button>
+            {/* Diary Header */}
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 flex-shrink-0">
+              <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
+              <motion.button  
+                onClick={() => setIsDiaryOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <CloseIcon className="text-gray-800" fontSize="large" />
+              </motion.button>
+            </div>
 
-            {/* Diary Content */}
+            {/* Diary Content - This can scroll */}
             <div 
               className="flex-1 px-6 py-4 overflow-y-auto overscroll-contain"
+              // Additional safety - prevent touch events from this scrollable area
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
             >
-              {/* Use diaryContent instead of currentPlanet.diaryContent */}
+              {/* Date and Planet Indicator */}
               <motion.div
                 className="flex justify-between items-center mb-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -627,12 +592,13 @@ export default function Homepage2() {
                 transition={{ delay: 0.1 }}
               >
                 <span className="text-lg font-bold text-gray-700">
-                  {diaryContent.date}
+                  {currentPlanet.diaryContent.date}
                 </span>
+                {/* Replace color dot with image */}
                 <div className="w-8 h-8 rounded-full overflow-hidden">
                   <Image
-                    src={diaryContent.colorImage}
-                    alt={`${currentPlanet?.name || 'planet'} indicator`}
+                    src={currentPlanet.diaryContent.colorImage}
+                    alt={`${currentPlanet.name} indicator`}
                     width={32}
                     height={32}
                     className="w-full h-full object-cover"
@@ -640,7 +606,7 @@ export default function Homepage2() {
                 </div>
               </motion.div>
 
-              <span className="text-lg font-bold text-gray-700">
+             <span className="text-lg font-bold text-gray-700">
                              莉莉的作品：
                            </span>
              
@@ -652,8 +618,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.15 }}
                            >
                              <Image
-                               src={diaryContent.titleImage}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.titleImage}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={120}
                                className="w-full h-auto object-cover rounded-2xl"
@@ -691,8 +657,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.2 }}
                            >
                              <Image
-                               src={diaryContent.illustration}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.illustration}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={200}
                                className="w-full h-full object-cover rounded-2xl"
@@ -707,7 +673,7 @@ export default function Homepage2() {
                              transition={{ delay: 0.25 }}
                            >
                              <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story}
+                               {currentPlanet.diaryContent.story}
                              </p>
                            </motion.div>
              
@@ -723,7 +689,7 @@ export default function Homepage2() {
                            <div className="flex justify-end">
                              <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
                                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog3}
+                                 {currentPlanet.diaryContent.dialog3}
                                </p>
                                {/* Speech bubble tail pointing right */}
                                <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
@@ -740,7 +706,7 @@ export default function Homepage2() {
                            <div className="flex justify-start">
                              <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
                                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog4}
+                                 {currentPlanet.diaryContent.dialog4}
                                </p>
                                {/* Speech bubble tail pointing left */}
                                <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
@@ -759,8 +725,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.2 }}
                            >
                              <Image
-                               src={diaryContent.illustration2}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.illustration2}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={200}
                                className="w-full h-full object-cover rounded-2xl"
@@ -775,7 +741,7 @@ export default function Homepage2() {
                              transition={{ delay: 0.25 }}
                            >
                              <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story2}
+                               {currentPlanet.diaryContent.story2}
                              </p>
                            </motion.div>
              
@@ -788,8 +754,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.2 }}
                            >
                              <Image
-                               src={diaryContent.illustration3}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.illustration3}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={200}
                                className="w-full h-full object-cover rounded-2xl"
@@ -804,7 +770,7 @@ export default function Homepage2() {
                              transition={{ delay: 0.25 }}
                            >
                              <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story3}
+                               {currentPlanet.diaryContent.story3}
                              </p>
                            </motion.div>
              
@@ -824,7 +790,7 @@ export default function Homepage2() {
                            <div className="flex justify-start">
                              <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
                                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog}
+                                 {currentPlanet.diaryContent.dialog}
                                </p>
                                {/* Speech bubble tail pointing left */}
                                <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
@@ -837,7 +803,7 @@ export default function Homepage2() {
                            <div className="flex justify-end">
                              <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
                                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog2}
+                                 {currentPlanet.diaryContent.dialog2}
                                </p>
                                {/* Speech bubble tail pointing right */}
                                <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
@@ -856,8 +822,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.2 }}
                            >
                              <Image
-                               src={diaryContent.illustration4}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.illustration4}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={200}
                                className="w-full h-full object-cover rounded-2xl"
@@ -872,7 +838,7 @@ export default function Homepage2() {
                              transition={{ delay: 0.25 }}
                            >
                              <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story4}
+                               {currentPlanet.diaryContent.story4}
                              </p>
                            </motion.div>
              
@@ -885,8 +851,8 @@ export default function Homepage2() {
                              transition={{ delay: 0.2 }}
                            >
                              <Image
-                               src={diaryContent.illustration5}
-                               alt={diaryContent.title}
+                               src={currentPlanet.diaryContent.illustration5}
+                               alt={currentPlanet.diaryContent.title}
                                width={400}
                                height={200}
                                className="w-full h-full object-cover rounded-2xl"
@@ -901,7 +867,7 @@ export default function Homepage2() {
                              transition={{ delay: 0.25 }}
                            >
                              <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story5}
+                               {currentPlanet.diaryContent.story5}
                              </p>
                            </motion.div>
              
