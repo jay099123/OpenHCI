@@ -601,25 +601,27 @@ export default function Homepage2() {
             onTouchMove={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
-            <motion.button
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full 
-              shadow-lg flex items-center justify-center text-gray-600 hover:text-gray-800"
-              onClick={() => setIsDiaryOpen(false)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <CloseIcon fontSize="small" />
-            </motion.button>
+            {/* Diary Header - THIS WAS MISSING */}
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 flex-shrink-0">
+              <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
+              <motion.button  
+                onClick={() => setIsDiaryOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <CloseIcon className="text-gray-800" fontSize="large" />
+              </motion.button>
+            </div>
 
-            {/* Diary Content */}
+            {/* Diary Content - This can scroll */}
             <div 
               className="flex-1 px-6 py-4 overflow-y-auto overscroll-contain"
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
             >
-              {/* Use diaryContent instead of currentPlanet.diaryContent */}
+              {/* Date and Planet Indicator */}
               <motion.div
                 className="flex justify-between items-center mb-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -629,6 +631,7 @@ export default function Homepage2() {
                 <span className="text-lg font-bold text-gray-700">
                   {diaryContent.date}
                 </span>
+                {/* Replace color dot with image */}
                 <div className="w-8 h-8 rounded-full overflow-hidden">
                   <Image
                     src={diaryContent.colorImage}
@@ -641,274 +644,273 @@ export default function Homepage2() {
               </motion.div>
 
               <span className="text-lg font-bold text-gray-700">
-                             莉莉的作品：
-                           </span>
-             
-                           {/* Story Title */}
-                           <motion.div
-                             className="rounded-2xl mb-6 overflow-hidden"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.15 }}
-                           >
-                             <Image
-                               src={diaryContent.titleImage}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={120}
-                               className="w-full h-auto object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           <span className="text-lg font-bold text-gray-700">
-                             今日觀察：
-                           </span>
-             
-                           <motion.div
-                             className="bg-red-100 rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               今日故事提及拾金不昧概念，鼓勵小朋友誠實守信。
-                               莉莉也在故事間選擇把錢還給媽媽，展現了誠實的美德。
-                               往後父母也可以深化關於誠實、守信的問題討論。
-                             </p>
-                           </motion.div>
-             
-                           <span className="text-lg font-bold text-gray-700">
-                             故事回顧：
-                           </span>
-             
-             
-                           {/* Story Illustration */}
-                           <motion.div
-                             className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                             justify-center overflow-hidden"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.2 }}
-                           >
-                             <Image
-                               src={diaryContent.illustration}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={200}
-                               className="w-full h-full object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           {/* Story Text */}
-                           <motion.div
-                             className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story}
-                             </p>
-                           </motion.div>
-             
-                           {/* Speech Bubbles */}
-                           <motion.div
-                             className="space-y-4 mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                     
-                           {/* Answer Speech Bubble */}
-                           <div className="flex justify-end">
-                             <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                               <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog3}
-                               </p>
-                               {/* Speech bubble tail pointing right */}
-                               <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
-                                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
-                               </div>
-                             </div>
-                           </div>
-             
-                           <span className="text-sm font-bold text-gray-700 ">
-                             DearPlanet
-                           </span>
-             
-                           {/* Question Speech Bubble */}
-                           <div className="flex justify-start">
-                             <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                               <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog4}
-                               </p>
-                               {/* Speech bubble tail pointing left */}
-                               <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
-                                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
-                               </div>
-                             </div>
-                           </div>
-                           </motion.div>
-             
-                           {/* Story Illustration2 */}
-                           <motion.div
-                             className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                             justify-center overflow-hidde"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.2 }}
-                           >
-                             <Image
-                               src={diaryContent.illustration2}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={200}
-                               className="w-full h-full object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           {/* Story Text2 */}
-                           <motion.div
-                             className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story2}
-                             </p>
-                           </motion.div>
-             
-                           {/* Story Illustration3 */}
-                           <motion.div
-                             className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                             justify-center overflow-hidde"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.2 }}
-                           >
-                             <Image
-                               src={diaryContent.illustration3}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={200}
-                               className="w-full h-full object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           {/* Story Text2 */}
-                           <motion.div
-                             className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story3}
-                             </p>
-                           </motion.div>
-             
-                           {/* Story Text with Speech Bubbles */}
-                           <motion.div
-                             className="space-y-4 mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-             
-                           <span className="text-sm font-bold text-gray-700 ">
-                             DearPlanet
-                           </span>
-             
-                           {/* Question Speech Bubble */}
-                           <div className="flex justify-start">
-                             <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                               <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog}
-                               </p>
-                               {/* Speech bubble tail pointing left */}
-                               <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
-                                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
-                               </div>
-                             </div>
-                           </div>
-             
-                           {/* Answer Speech Bubble */}
-                           <div className="flex justify-end">
-                             <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                               <p className="text-gray-800 leading-relaxed text-base font-bold">
-                                 {diaryContent.dialog2}
-                               </p>
-                               {/* Speech bubble tail pointing right */}
-                               <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
-                                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
-                               </div>
-                             </div>
-                           </div>
-                           </motion.div>
-             
-                           {/* Story Illustration4 */}
-                           <motion.div
-                             className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                             justify-center overflow-hidde"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.2 }}
-                           >
-                             <Image
-                               src={diaryContent.illustration4}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={200}
-                               className="w-full h-full object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           {/* Story Text3 */}
-                           <motion.div
-                             className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story4}
-                             </p>
-                           </motion.div>
-             
-                           {/* Story Illustration5 */}
-                           <motion.div
-                             className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                             justify-center overflow-hidde"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.2 }}
-                           >
-                             <Image
-                               src={diaryContent.illustration5}
-                               alt={diaryContent.title}
-                               width={400}
-                               height={200}
-                               className="w-full h-full object-cover rounded-2xl"
-                             />
-                           </motion.div>
-             
-                           {/* Story Text2 */}
-                           <motion.div
-                             className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                             initial={{ opacity: 0, y: 20 }}
-                             animate={{ opacity: 1, y: 0 }}
-                             transition={{ delay: 0.25 }}
-                           >
-                             <p className="text-gray-800 leading-relaxed text-base font-bold">
-                               {diaryContent.story5}
-                             </p>
-                           </motion.div>
-             
-                           <p className="text-gray-800 leading-relaxed text-base font-bold">
-                             ----------------故事結束----------------
-                           </p>
-             
+                莉莉的作品：
+              </span>
+
+              {/* Story Title */}
+              <motion.div
+                className="rounded-2xl mb-6 overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                <Image
+                  src={diaryContent.titleImage}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={120}
+                  className="w-full h-auto object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              <span className="text-lg font-bold text-gray-700">
+                今日觀察：
+              </span>
+
+              <motion.div
+                className="bg-red-100 rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  今日故事提及拾金不昧概念，鼓勵小朋友誠實守信。
+                  莉莉也在故事間選擇把錢還給媽媽，展現了誠實的美德。
+                  往後父母也可以深化關於誠實、守信的問題討論。
+                </p>
+              </motion.div>
+
+              <span className="text-lg font-bold text-gray-700">
+                故事回顧：
+              </span>
+
+              {/* Story Illustration */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={diaryContent.illustration}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {diaryContent.story}
+                </p>
+              </motion.div>
+
+              {/* Speech Bubbles */}
+              <motion.div
+                className="space-y-4 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+
+              {/* Answer Speech Bubble */}
+              <div className="flex justify-end">
+                <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {diaryContent.dialog3}
+                  </p>
+                  {/* Speech bubble tail pointing right */}
+                  <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
+                  </div>
+                </div>
+              </div>
+
+              <span className="text-sm font-bold text-gray-700 ">
+                DearPlanet
+              </span>
+
+              {/* Question Speech Bubble */}
+              <div className="flex justify-start">
+                <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {diaryContent.dialog4}
+                  </p>
+                  {/* Speech bubble tail pointing left */}
+                  <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
+                  </div>
+                </div>
+              </div>
+              </motion.div>
+
+              {/* Story Illustration2 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={diaryContent.illustration2}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text2 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {diaryContent.story2}
+                </p>
+              </motion.div>
+
+              {/* Story Illustration3 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={diaryContent.illustration3}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text3 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {diaryContent.story3}
+                </p>
+              </motion.div>
+
+              {/* Story Text with Speech Bubbles */}
+              <motion.div
+                className="space-y-4 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+
+              <span className="text-sm font-bold text-gray-700 ">
+                DearPlanet
+              </span>
+
+              {/* Question Speech Bubble */}
+              <div className="flex justify-start">
+                <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {diaryContent.dialog}
+                  </p>
+                  {/* Speech bubble tail pointing left */}
+                  <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Answer Speech Bubble */}
+              <div className="flex justify-end">
+                <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
+                  <p className="text-gray-800 leading-relaxed text-base font-bold">
+                    {diaryContent.dialog2}
+                  </p>
+                  {/* Speech bubble tail pointing right */}
+                  <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
+                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
+                  </div>
+                </div>
+              </div>
+              </motion.div>
+
+              {/* Story Illustration4 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={diaryContent.illustration4}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text4 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {diaryContent.story4}
+                </p>
+              </motion.div>
+
+              {/* Story Illustration5 */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={diaryContent.illustration5}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </motion.div>
+
+              {/* Story Text5 */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-gray-800 leading-relaxed text-base font-bold">
+                  {diaryContent.story5}
+                </p>
+              </motion.div>
+
+              <p className="text-gray-800 leading-relaxed text-base font-bold">
+                ----------------故事結束----------------
+              </p>
+
             </div>
           </motion.div>
         )}
