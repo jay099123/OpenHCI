@@ -1,9 +1,10 @@
 // hooks/usePlanets.ts
 import { useState, useEffect } from 'react';
 import { getAllPlanets, Planet } from '@/lib/services/planets';
-import { getStoriesByPlanet, Story } from '@/lib/services/stories';
+import { getStoryById, Story, StoryPage } from '@/lib/services/stories';
 
 export interface PlanetWithStory extends Planet {
+  story?: Story;
   diaryContent?: {
     date: string;
     title: string;
@@ -26,8 +27,12 @@ export interface PlanetWithStory extends Planet {
   };
 }
 
+// Helper function to sort pages by pageNumber
+function sortPagesByNumber(pages: { [key: string]: StoryPage }): StoryPage[] {
+  return Object.values(pages).sort((a, b) => a.pageNumber - b.pageNumber);
+}
+
 export function usePlanets() {
-  // ✅ All hooks at the top
   const [planets, setPlanets] = useState<PlanetWithStory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,56 +43,70 @@ export function usePlanets() {
         setLoading(true);
         setError(null);
         
-        console.log('🚀 Fetching planets...');
+        console.log('🌍 Starting to fetch planets...');
         const planetsData = await getAllPlanets();
-        console.log('📊 Planets fetched:', planetsData.length);
+        console.log('🌍 Planets fetched:', planetsData.length, planetsData);
         
-        // Fetch stories for each planet
+        if (planetsData.length === 0) {
+          console.warn('⚠️ No planets generated from stories');
+          setPlanets([]);
+          return;
+        }
+        
+        console.log('📚 Fetching stories for each planet...');
         const planetsWithStories = await Promise.all(
           planetsData.map(async (planet) => {
             try {
-              const stories = await getStoriesByPlanet(planet.id);
-              const latestStory = stories[0];
+              const story = await getStoryById(planet.storyId);
+              console.log(`📖 Story for planet ${planet.id}:`, story);
               
-              if (latestStory) {
+              if (story && story.pages) {
+                // Sort pages by pageNumber to ensure correct order
+                const sortedPages = sortPagesByNumber(story.pages);
+                console.log(`📑 Sorted pages for ${story.title}:`, sortedPages);
+                
                 return {
                   ...planet,
+                  story,
                   diaryContent: {
-                    date: latestStory.date,
-                    title: latestStory.title,
-                    story: latestStory.content.story1,
-                    story2: latestStory.content.story2,
-                    story3: latestStory.content.story3,
-                    story4: latestStory.content.story4,
-                    story5: latestStory.content.story5,
-                    illustration: latestStory.illustrations[0] || '/placeholder.png',
-                    illustration2: latestStory.illustrations[1] || '/placeholder.png',
-                    illustration3: latestStory.illustrations[2] || '/placeholder.png',
-                    illustration4: latestStory.illustrations[3] || '/placeholder.png',
-                    illustration5: latestStory.illustrations[4] || '/placeholder.png',
-                    dialog: latestStory.dialogs.question,
-                    dialog2: latestStory.dialogs.option1,
-                    dialog3: latestStory.dialogs.response1,
-                    dialog4: latestStory.dialogs.answer,
+                    date: new Date(story.createdAt).toLocaleDateString('zh-TW'),
+                    title: story.title,
+                    // Use actual text from pages, fallback to title if not enough pages
+                    story: sortedPages[0]?.text || `${story.title} - 開始我們的故事吧！`,
+                    story2: sortedPages[1]?.text || '故事繼續...',
+                    story3: sortedPages[2]?.text || '故事發展...',
+                    story4: sortedPages[3]?.text || '故事高潮...',
+                    story5: sortedPages[4]?.text || '故事結局...',
+                    // Use actual imageUrls from pages, fallback to placeholders
+                    illustration: sortedPages[0]?.imageUrl || "/page1SS.png",
+                    illustration2: sortedPages[1]?.imageUrl || "/p2.png", 
+                    illustration3: sortedPages[2]?.imageUrl || "/p3.png",
+                    illustration4: sortedPages[3]?.imageUrl || "/p4.png",
+                    illustration5: sortedPages[4]?.imageUrl || "/p5.png",
+                    dialog: "這個故事教會了我們什麼？",
+                    dialog2: "我學到了很多！",
+                    dialog3: "很棒的領悟！",
+                    dialog4: `從《${story.title}》中我們可以學習到重要的品格。`,
                     colorImage: planet.image,
                     titleImage: "/draw-09.png"
                   }
                 };
+              } else {
+                console.warn(`⚠️ No story or pages found for planet: ${planet.id}`);
+                return planet;
               }
-              
-              return planet;
             } catch (storyError) {
-              console.warn(`Failed to fetch stories for planet ${planet.id}:`, storyError);
+              console.error(`❌ Error fetching story for planet ${planet.id}:`, storyError);
               return planet;
             }
           })
         );
         
-        console.log('✅ Planets with stories:', planetsWithStories);
+        console.log('✅ Final planets with stories:', planetsWithStories);
         setPlanets(planetsWithStories);
       } catch (err) {
-        console.error('❌ Error fetching planets:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch planets');
+        console.error('❌ Error in fetchPlanetsWithStories:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch data');
       } finally {
         setLoading(false);
       }

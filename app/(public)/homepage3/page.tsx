@@ -11,32 +11,6 @@ type Direction = "up" | "down";
 /**
  * Planet shape used in the planets array.
  */
-interface Planet {
-  name: string;
-  image: string;
-  color: string;
-  title: string;
-  diaryContent: {
-    date: string;
-    title: string;
-    story: string;
-    story2: string; // Optional second story
-    story3: string; // Optional third story
-    story4: string; // Optional fourth story
-    story5?: string; // Optional fifth story
-    illustration: string;
-    illustration2: string; // Optional second illustration
-    illustration3: string; // Optional third illustration
-    illustration4: string; // Optional fourth illustration
-    illustration5: string; // Optional fifth illustration
-    dialog: string; // New: dialog text for the diary
-    dialog2: string; // New: second dialog text
-    dialog3?: string; // Optional third dialog text
-    dialog4?: string; // Optional fourth dialog text
-    colorImage: string;      // New: image for color indicator
-    titleImage: string;      // New: image for title block
-  };
-}
 
 export default function Homepage2() {
   // ------------------------- state -------------------------
@@ -232,6 +206,20 @@ export default function Homepage2() {
       `,
       border: `2px solid ${color}80`,
     };
+  };
+
+  // Add this helper function at the top of your component
+  const getImageSrc = (url: string) => {
+    // If it's a Firebase Storage URL, use it directly
+    if (url.startsWith('https://firebasestorage.googleapis.com')) {
+      return url;
+    }
+    // If it's a local path, use it as is
+    if (url.startsWith('/')) {
+      return url;
+    }
+    // Fallback to placeholder
+    return '/placeholder.png';
   };
 
   return (
@@ -664,23 +652,6 @@ export default function Homepage2() {
               </motion.div>
 
               <span className="text-lg font-bold text-gray-700">
-                今日觀察：
-              </span>
-
-              <motion.div
-                className="bg-red-100 rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  今日故事提及拾金不昧概念，鼓勵小朋友誠實守信。
-                  莉莉也在故事間選擇把錢還給媽媽，展現了誠實的美德。
-                  往後父母也可以深化關於誠實、守信的問題討論。
-                </p>
-              </motion.div>
-
-              <span className="text-lg font-bold text-gray-700">
                 故事回顧：
               </span>
 
@@ -693,11 +664,15 @@ export default function Homepage2() {
                 transition={{ delay: 0.2 }}
               >
                 <Image
-                  src={diaryContent.illustration}
+                  src={getImageSrc(diaryContent.illustration)}
                   alt={diaryContent.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Image failed to load:', diaryContent.illustration);
+                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                  }}
                 />
               </motion.div>
 
@@ -713,44 +688,6 @@ export default function Homepage2() {
                 </p>
               </motion.div>
 
-              {/* Speech Bubbles */}
-              <motion.div
-                className="space-y-4 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-
-              {/* Answer Speech Bubble */}
-              <div className="flex justify-end">
-                <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                  <p className="text-gray-800 leading-relaxed text-base font-bold">
-                    {diaryContent.dialog3}
-                  </p>
-                  {/* Speech bubble tail pointing right */}
-                  <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
-                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
-                  </div>
-                </div>
-              </div>
-
-              <span className="text-sm font-bold text-gray-700 ">
-                DearPlanet
-              </span>
-
-              {/* Question Speech Bubble */}
-              <div className="flex justify-start">
-                <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                  <p className="text-gray-800 leading-relaxed text-base font-bold">
-                    {diaryContent.dialog4}
-                  </p>
-                  {/* Speech bubble tail pointing left */}
-                  <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
-                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
-                  </div>
-                </div>
-              </div>
-              </motion.div>
 
               {/* Story Illustration2 */}
               <motion.div
@@ -761,11 +698,15 @@ export default function Homepage2() {
                 transition={{ delay: 0.2 }}
               >
                 <Image
-                  src={diaryContent.illustration2}
+                  src={getImageSrc(diaryContent.illustration2)}
                   alt={diaryContent.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Image failed to load:', diaryContent.illustration2);
+                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                  }}
                 />
               </motion.div>
 
@@ -790,11 +731,15 @@ export default function Homepage2() {
                 transition={{ delay: 0.2 }}
               >
                 <Image
-                  src={diaryContent.illustration3}
+                  src={getImageSrc(diaryContent.illustration3)}
                   alt={diaryContent.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Image failed to load:', diaryContent.illustration3);
+                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                  }}
                 />
               </motion.div>
 
@@ -810,44 +755,7 @@ export default function Homepage2() {
                 </p>
               </motion.div>
 
-              {/* Story Text with Speech Bubbles */}
-              <motion.div
-                className="space-y-4 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-
-              <span className="text-sm font-bold text-gray-700 ">
-                DearPlanet
-              </span>
-
-              {/* Question Speech Bubble */}
-              <div className="flex justify-start">
-                <div className="relative bg-orange-100 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                  <p className="text-gray-800 leading-relaxed text-base font-bold">
-                    {diaryContent.dialog}
-                  </p>
-                  {/* Speech bubble tail pointing left */}
-                  <div className="absolute left-[-8px] top-1/2 transform -translate-y-1/2">
-                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-orange-100"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Answer Speech Bubble */}
-              <div className="flex justify-end">
-                <div className="relative bg-orange-200 rounded-3xl px-6 py-4 max-w-[80%] shadow-sm">
-                  <p className="text-gray-800 leading-relaxed text-base font-bold">
-                    {diaryContent.dialog2}
-                  </p>
-                  {/* Speech bubble tail pointing right */}
-                  <div className="absolute right-[-8px] top-1/2 transform -translate-y-1/2">
-                    <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-orange-200"></div>
-                  </div>
-                </div>
-              </div>
-              </motion.div>
+              
 
               {/* Story Illustration4 */}
               <motion.div
@@ -858,11 +766,15 @@ export default function Homepage2() {
                 transition={{ delay: 0.2 }}
               >
                 <Image
-                  src={diaryContent.illustration4}
+                  src={getImageSrc(diaryContent.illustration4)}
                   alt={diaryContent.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Image failed to load:', diaryContent.illustration4);
+                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                  }}
                 />
               </motion.div>
 
@@ -887,11 +799,15 @@ export default function Homepage2() {
                 transition={{ delay: 0.2 }}
               >
                 <Image
-                  src={diaryContent.illustration5}
+                  src={getImageSrc(diaryContent.illustration5)}
                   alt={diaryContent.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Image failed to load:', diaryContent.illustration5);
+                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                  }}
                 />
               </motion.div>
 

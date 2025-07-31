@@ -1,66 +1,102 @@
-// services/stories.ts
-import { storiesCollection } from "@/utils/firebase.browser";
-import { DocumentData, Query, getDocs, doc, getDoc, where, query } from "firebase/firestore";
+// lib/services/stories.ts
+import { database } from "@/utils/firebase.browser";
+import { ref, get, query, orderByChild, equalTo } from "firebase/database";
 
-
+export interface StoryPage {
+  imageUrl: string;
+  pageNumber: number;
+  text: string;
+}
 
 export interface Story {
-  id: string;
-  planetId: string;
+  id: string; // Firebase key like "-OWKo20VEu1lzsK7OaFT"
+  storyId: string;
   title: string;
-  date: string;
-  content: {
-    story1: string;
-    story2: string;
-    story3: string;
-    story4: string;
-    story5: string;
-  };
-  illustrations: string[];
-  dialogs: {
-    question: string;
-    option1: string;
-    response1: string;
-    answer: string;
-  };
-  metadata: {
-    generatedBy: string;
-    theme: string;
-    targetAge: string;
-    moralLesson: string;
-  };
-  isPublished: boolean;
   createdAt: string;
+  colorPalette: {
+    hex: string;
+    name: string;
+  }[];
+  pages: { [key: string]: StoryPage }; // Pages indexed by number (0, 1, 2, etc.)
 }
 
 export async function getAllStories(): Promise<Story[]> {
-  const querySnapshot = await getDocs(storiesCollection);
-  
-  const stories = querySnapshot.docs.map((doc: DocumentData) => {
-    return { ...doc.data(), id: doc.id };
-  });
+  try {
+    console.log('🚀 Getting all stories from Realtime Database...');
+    
+    const storiesRef = ref(database, 'stories');
+    const snapshot = await get(storiesRef);
+    
+    if (!snapshot.exists()) {
+      console.log('📊 No stories found in database');
+      return [];
+    }
+    
+    const storiesData = snapshot.val();
+    console.log('📊 Raw stories data:', storiesData);
+    
+    const stories: Story[] = Object.keys(storiesData).map(key => ({
+      id: key,
+      ...storiesData[key]
+    }));
 
-  return stories as Story[];
-}
-
-export async function getStoriesByPlanet(planetId: string): Promise<Story[]> {
-  const q = query(storiesCollection, where("planetId", "==", planetId));
-  const querySnapshot = await getDocs(q);
-  
-  const stories = querySnapshot.docs.map((doc: DocumentData) => {
-    return { ...doc.data(), id: doc.id };
-  });
-
-  return stories as Story[];
+    console.log('✅ Final stories array:', stories);
+    return stories;
+  } catch (error) {
+    console.error('❌ Error in getAllStories:', error);
+    throw error;
+  }
 }
 
 export async function getStoryById(storyId: string): Promise<Story | null> {
-  const docRef = doc(storiesCollection, storyId);
-  const docSnap = await getDoc(docRef);
-  
-  if (docSnap.exists()) {
-    return { ...docSnap.data(), id: docSnap.id } as Story;
+  try {
+    console.log(`🚀 Getting story by ID: ${storyId}`);
+    
+    const storyRef = ref(database, `stories/${storyId}`);
+    const snapshot = await get(storyRef);
+    
+    if (!snapshot.exists()) {
+      console.log(`❌ Story not found: ${storyId}`);
+      return null;
+    }
+    
+    const storyData = snapshot.val();
+    const story: Story = {
+      id: storyId,
+      ...storyData
+    };
+    
+    console.log(`✅ Found story:`, story);
+    return story;
+  } catch (error) {
+    console.error(`❌ Error getting story ${storyId}:`, error);
+    throw error;
   }
-  
-  return null;
+}
+
+export async function getStoriesByTitle(title: string): Promise<Story[]> {
+  try {
+    console.log(`🚀 Getting stories with title: ${title}`);
+    
+    const storiesRef = ref(database, 'stories');
+    const titleQuery = query(storiesRef, orderByChild('title'), equalTo(title));
+    const snapshot = await get(titleQuery);
+    
+    if (!snapshot.exists()) {
+      console.log(`📊 No stories found with title: ${title}`);
+      return [];
+    }
+    
+    const storiesData = snapshot.val();
+    const stories: Story[] = Object.keys(storiesData).map(key => ({
+      id: key,
+      ...storiesData[key]
+    }));
+
+    console.log(`✅ Stories with title "${title}":`, stories);
+    return stories;
+  } catch (error) {
+    console.error(`❌ Error getting stories by title ${title}:`, error);
+    throw error;
+  }
 }

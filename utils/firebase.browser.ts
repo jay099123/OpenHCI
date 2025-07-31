@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 
 const clientCredentials = {
@@ -9,23 +9,24 @@ const clientCredentials = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL, // Use the env variable directly
 };
 
-const app = initializeApp(clientCredentials);
+console.log('🔧 Firebase Configuration:', {
+  ...clientCredentials,
+  apiKey: clientCredentials.apiKey ? `${clientCredentials.apiKey.substring(0, 10)}...` : 'Missing',
+  databaseURL: clientCredentials.databaseURL || 'Missing'
+});
 
-const db = getFirestore(app);
+const app = initializeApp(clientCredentials);
+const database = getDatabase(app);
 const storage = getStorage(app);
 
-// Collections for your storyteller project
-const planetsCollection = collection(db, "planets");
-const storiesCollection = collection(db, "stories");
-const usersCollection = collection(db, "users");
+console.log('✅ Firebase initialized');
+console.log('📊 Database instance:', database);
 
 export {
   app,
-  db,
+  database,
   storage,
-  planetsCollection,
-  storiesCollection,
-  usersCollection,
 };
