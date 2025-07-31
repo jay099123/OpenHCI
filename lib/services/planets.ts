@@ -39,15 +39,21 @@ export async function getAllPlanets(): Promise<Planet[]> {
         'respect', 'responsibility', 'generosity', 'patience', 'humility'
       ];
       
-      // Generate planet names based on color characteristics
-      const planetName = generatePlanetName(primaryColor, index);
+      // Use planetName from database, fallback to generated name if not available
+      const planetName = story.planetName || generatePlanetName(primaryColor, index);
       const planetTitle = generatePlanetTitle(story.title, index);
       
       const themeIndex = index % themes.length;
       
+      console.log(`🏷️ Planet name for story "${story.title}":`, {
+        dbPlanetName: story.planetName,
+        generatedName: generatePlanetName(primaryColor, index),
+        finalName: planetName
+      });
+      
       return {
         id: `planet_${story.id}`,
-        name: planetName,
+        name: planetName, // Now uses database planetName or fallback
         image: '/cplan.png', // Use same base image for all planets
         color: primaryColor, // Use the story's color
         title: planetTitle,

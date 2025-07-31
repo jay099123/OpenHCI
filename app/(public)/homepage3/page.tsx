@@ -82,6 +82,7 @@ export default function Homepage2() {
     illustration5: "/placeholder.png",
     colorImage: "/placeholder.png",
     titleImage: "/placeholder.png",
+    planetName: currentPlanet?.name || currentPlanet?.story?.planetName || "未知星球",
     planetColor: currentPlanet?.color || currentPlanet?.story?.colorPalette?.[0]?.hex || "#8b5cf6"
   };
 
@@ -235,7 +236,7 @@ export default function Homepage2() {
       <div className="flex justify-center items-center mb-4 mt-4 flex-shrink-0 relative z-10">
         <AnimatePresence mode="wait">
           <motion.h1
-            key={currentPlanet?.title || 'loading'}
+            key={currentPlanet?.name || 'loading'}
             className="text-4xl font-bold text-white mt-10"
             style={{
               textShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
@@ -249,7 +250,7 @@ export default function Homepage2() {
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           >
-            {currentPlanet?.title || 'Loading...'}
+            {currentPlanet?.name || 'Loading...'}
           </motion.h1>
         </AnimatePresence>
       </div>
@@ -347,15 +348,16 @@ export default function Homepage2() {
                       background: `
                         radial-gradient(
                           circle at center,
-                          ${currentPlanet?.color}50 0%,
-                          ${currentPlanet?.color}30 50%,
+                          ${currentPlanet?.color}80 0%,
+                          ${currentPlanet?.color}60 50%,
+                          ${currentPlanet?.color}20 80%,
                           transparent 100%
                         )
                       `,
                       mixBlendMode: 'multiply',
                     }}
                     animate={{
-                      opacity: [0.8, 1, 0.8],
+                      opacity: [0.9, 1, 0.9],
                     }}
                     transition={{ 
                       duration: 3, 
