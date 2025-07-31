@@ -68,7 +68,7 @@ export default function Homepage2() {
 
   // Fallback content
   const fallbackContent = {
-    date: "2025/07/24",
+    date: "2025/08/03",
     title: "Loading...",
     story: "故事加載中...",
     story2: "故事加載中...",
@@ -80,12 +80,9 @@ export default function Homepage2() {
     illustration3: "/placeholder.png",
     illustration4: "/placeholder.png",
     illustration5: "/placeholder.png",
-    dialog: "加載中...",
-    dialog2: "加載中...",
-    dialog3: "加載中...",
-    dialog4: "加載中...",
     colorImage: "/placeholder.png",
-    titleImage: "/placeholder.png"
+    titleImage: "/placeholder.png",
+    planetColor: currentPlanet?.color || currentPlanet?.story?.colorPalette?.[0]?.hex || "#8b5cf6"
   };
 
   // Use safe content
@@ -149,18 +146,18 @@ export default function Homepage2() {
 
   // Touch handlers
   const onTouchStart = (e: React.TouchEvent) => {
-    if (isDiaryOpen) return; // Add this check
+    if (isDiaryOpen) return;
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientY);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (isDiaryOpen) return; // Add this check
+    if (isDiaryOpen) return;
     setTouchEnd(e.targetTouches[0].clientY);
   };
 
   const onTouchEnd = () => {
-    if (isDiaryOpen) return; // Add this check
+    if (isDiaryOpen) return;
     if (!touchStart || !touchEnd) return;
     
     const distance = touchStart - touchEnd;
@@ -186,28 +183,6 @@ export default function Homepage2() {
     setIsDiaryOpen(true);
   };
 
-  // Enhanced styling function
-  const getPlanetStyling = (planet: PlanetWithStory, index: number) => {
-    const colors = {
-      politeness_planet: "#ef4444",
-      honesty_planet: "#22c55e", 
-      kindness_planet: "#3b82f6",
-      default: planet.color || "#8b5cf6"
-    };
-
-    const color = colors[planet.id as keyof typeof colors] || colors.default;
-    
-    return {
-      background: `linear-gradient(135deg, ${color}66, ${color}99)`,
-      boxShadow: `
-        0 20px 40px rgba(0, 0, 0, 0.2),
-        0 0 80px ${color}40,
-        inset 0 0 120px rgba(255, 255, 255, 0.1)
-      `,
-      border: `2px solid ${color}80`,
-    };
-  };
-
   // Add this helper function at the top of your component
   const getImageSrc = (url: string) => {
     // If it's a Firebase Storage URL, use it directly
@@ -228,7 +203,10 @@ export default function Homepage2() {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      style={{ touchAction: 'none' }}
+      style={{ 
+        touchAction: 'none',
+        background: 'linear-gradient(to bottom, #1a1a2e, #16213e, #0f3460)'
+      }}
     >
       {/* Background Stars Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -320,7 +298,7 @@ export default function Homepage2() {
                   rotate: exitDirection === "up" ? 70 : -70,
                 }}
               >
-                {/* Planet - Enhanced with 3D Lighting */}
+                {/* Planet - Enhanced with Strong Dynamic Color Overlay */}
                 <motion.div
                   className="relative overflow-hidden rounded-full"
                   style={{
@@ -340,6 +318,7 @@ export default function Homepage2() {
                     `,
                   }}
                 >
+                  {/* Base Planet Image */}
                   <motion.div
                     className="absolute inset-0 rounded-full"
                     style={{
@@ -350,7 +329,7 @@ export default function Homepage2() {
                       backgroundSize: "200% 100%",
                       backgroundRepeat: "repeat-x",
                       transform: "rotate(15deg) scale(1.2)",
-                      opacity: 0.8,
+                      opacity: 0.6, // Reduced more to let color show through
                     }}
                     animate={{ backgroundPosition: ["0% center", "-200% center"] }}
                     transition={{ 
@@ -360,11 +339,94 @@ export default function Homepage2() {
                     }}
                   />
 
+                  {/* Strong Color Tint Layer */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                      zIndex: 1.5,
+                      background: `
+                        radial-gradient(
+                          circle at center,
+                          ${currentPlanet?.color}50 0%,
+                          ${currentPlanet?.color}30 50%,
+                          transparent 100%
+                        )
+                      `,
+                      mixBlendMode: 'multiply',
+                    }}
+                    animate={{
+                      opacity: [0.8, 1, 0.8],
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity, 
+                      repeatType: "reverse", 
+                      ease: "easeInOut" 
+                    }}
+                  />
+
+                  {/* Enhanced Dynamic Color Overlay */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                      zIndex: 2,
+                      background: `
+                        radial-gradient(
+                          circle at center,
+                          ${currentPlanet?.color}60 0%,
+                          ${currentPlanet?.color}80 20%,
+                          ${currentPlanet?.color}40 50%,
+                          ${currentPlanet?.color}20 80%,
+                          transparent 100%
+                        )
+                      `,
+                      mixBlendMode: 'overlay',
+                    }}
+                    animate={{
+                      opacity: isPressed ? [0.9, 1, 0.9] : [0.7, 1, 0.7],
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity, 
+                      repeatType: "reverse", 
+                      ease: "easeInOut" 
+                    }}
+                  />
+
+                  {/* Additional Strong Color Layer */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                      zIndex: 3,
+                      background: `
+                        radial-gradient(
+                          circle at 40% 30%,
+                          ${currentPlanet?.color}90 0%,
+                          ${currentPlanet?.color}70 30%,
+                          ${currentPlanet?.color}30 60%,
+                          transparent 80%
+                        )
+                      `,
+                      mixBlendMode: 'overlay',
+                    }}
+                    animate={{
+                      opacity: [0.5, 0.8, 0.5],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity, 
+                      repeatType: "reverse", 
+                      ease: "easeInOut" 
+                    }}
+                  />
+
+                  {/* Keep all the existing highlight and shadow layers... */}
                   {/* Main highlight - top left */}
                   <div
                     className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
-                      zIndex: 2,
+                      zIndex: 4,
                       background: `
                         radial-gradient(ellipse 100px 70px at 25% 20%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%)
                       `,
@@ -375,7 +437,7 @@ export default function Homepage2() {
                   <div
                     className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
-                      zIndex: 3,
+                      zIndex: 5,
                       background: `
                         radial-gradient(
                         ellipse 50px 30px at 30% 15%, 
@@ -390,7 +452,7 @@ export default function Homepage2() {
                   <div
                     className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
-                      zIndex: 4,
+                      zIndex: 6,
                       background: `
                         radial-gradient(
                         ellipse 140px 120px at 75% 80%, 
@@ -407,38 +469,17 @@ export default function Homepage2() {
                   <div
                     className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
-                      zIndex: 5,
+                      zIndex: 7,
                       background: `
                         radial-gradient(circle at center, transparent 85%, rgba(255, 255, 255, 0.2) 90%, rgba(255, 255, 255, 0.1) 95%, transparent 100%)
                       `,
                     }}
                   />
                 </motion.div>
-
-                {/* Enhanced Glow */}
-                <motion.div
-                  className="absolute inset-0 rounded-full pointer-events-none"
-                  style={{
-                    transform: "scale(1.2)",
-                    background: `radial-gradient(circle, ${currentPlanet?.color}4D 0%, transparent 70%)`,
-                    filter: "blur(20px)",
-                    zIndex: 0,
-                  }}
-                  animate={{
-                    opacity: isPressed ? [0.6, 1, 0.6] : [0.4, 0.7, 0.4],
-                    scale: isPressed ? [1.2, 1.4, 1.2] : [1.2, 1.3, 1.2],
-                  }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity, 
-                    repeatType: "reverse", 
-                    ease: "easeInOut" 
-                  }}
-                />
               </motion.div>
             </AnimatePresence>
 
-            {/* Enhanced Rings - Made Permanently Visible */}
+            {/* Enhanced Rings - Made Permanently Visible with Dynamic Colors */}
             <motion.div
               className="absolute inset-0 rounded-full border pointer-events-none"
               style={{ 
@@ -480,29 +521,7 @@ export default function Homepage2() {
         </div>
       </div>
 
-      {/* Planet Navigation Dots */}
-      <div className="flex justify-center space-x-3 mb-8 relative z-10">
-        {planets.map((_, index) => (
-          <motion.button
-            key={index}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentPlanetIndex 
-                ? 'bg-white shadow-lg' 
-                : 'bg-white/40 hover:bg-white/60'
-            }`}
-            onClick={() => setCurrentPlanetIndex(index)}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.8 }}
-            style={{
-              boxShadow: index === currentPlanetIndex 
-                ? `0 0 20px ${currentPlanet?.color}80` 
-                : 'none'
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Navigation Instructions - Moved to separate section */}
+      {/* Navigation Instructions */}
       <motion.div 
         className="text-center text-white/60 text-sm flex-shrink-0 font-bold"
         initial={{ opacity: 0, y: 20 }}
@@ -523,9 +542,9 @@ export default function Homepage2() {
         </motion.p>
       </motion.div>
 
-      {/* Navigation Dots - Now at the bottom */}
+      {/* Navigation Dots */}
       <motion.div 
-        className="flex justify-center items-center pb-8 pt-4 flex-shrink-0 mb-30"
+        className="flex justify-center items-center pb-8 pt-4 flex-shrink-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
@@ -589,7 +608,7 @@ export default function Homepage2() {
             onTouchMove={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
           >
-            {/* Diary Header - THIS WAS MISSING */}
+            {/* Diary Header */}
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-2xl font-bold text-gray-800">星球日誌</h2>
               <motion.button  
@@ -619,214 +638,75 @@ export default function Homepage2() {
                 <span className="text-lg font-bold text-gray-700">
                   {diaryContent.date}
                 </span>
-                {/* Replace color dot with image */}
-                <div className="w-8 h-8 rounded-full overflow-hidden">
-                  <Image
-                    src={diaryContent.colorImage}
-                    alt={`${currentPlanet?.name || 'planet'} indicator`}
-                    width={32}
-                    height={32}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {/* Color dot using database color palette */}
+            <div 
+              className="w-8 h-8 rounded-full"
+              style={{
+                backgroundColor: currentPlanet?.story?.colorPalette?.[0]?.hex || currentPlanet?.color || '#8b5cf6',
+                border: '2px solid rgba(255, 255, 255, 0.8)',
+                boxShadow: `0 2px 8px ${currentPlanet?.story?.colorPalette?.[0]?.hex || currentPlanet?.color || '#8b5cf6'}40`
+              }}
+            />
               </motion.div>
-
-              <span className="text-lg font-bold text-gray-700">
-                莉莉的作品：
-              </span>
 
               {/* Story Title */}
               <motion.div
-                className="rounded-2xl mb-6 overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Image
-                  src={diaryContent.titleImage}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={120}
-                  className="w-full h-auto object-cover rounded-2xl"
-                />
-              </motion.div>
-
-              <span className="text-lg font-bold text-gray-700">
-                故事回顧：
-              </span>
-
-              {/* Story Illustration */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(diaryContent.illustration)}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Image failed to load:', diaryContent.illustration);
-                    (e.target as HTMLImageElement).src = '/placeholder.png';
-                  }}
-                />
-              </motion.div>
-
-              {/* Story Text */}
-              <motion.div
                 className="bg-white rounded-2xl p-6 shadow-sm mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
               >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {diaryContent.story}
+                <p className="text-gray-800 leading-relaxed text-xl font-bold text-center">
+                  {diaryContent.title}
                 </p>
               </motion.div>
 
+              {/* Story Pages - Dynamic based on database */}
+              {[1, 2, 3, 4, 5].map((pageNum) => {
+                const storyKey = pageNum === 1 ? 'story' : `story${pageNum}`;
+                const illustrationKey = pageNum === 1 ? 'illustration' : `illustration${pageNum}`;
+                
+                return (
+                  <div key={pageNum}>
+                    {/* Story Illustration */}
+                    <motion.div
+                      className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                      justify-center overflow-hidden"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 + (pageNum * 0.1) }}
+                    >
+                      <Image
+                        src={getImageSrc(diaryContent[illustrationKey as keyof typeof diaryContent] as string)}
+                        alt={diaryContent.title}
+                        width={400}
+                        height={200}
+                        className="w-full h-full object-cover rounded-2xl"
+                        onError={(e) => {
+                          console.warn('Image failed to load:', diaryContent[illustrationKey as keyof typeof diaryContent]);
+                          (e.target as HTMLImageElement).src = '/placeholder.png';
+                        }}
+                      />
+                    </motion.div>
 
-              {/* Story Illustration2 */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(diaryContent.illustration2)}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Image failed to load:', diaryContent.illustration2);
-                    (e.target as HTMLImageElement).src = '/placeholder.png';
-                  }}
-                />
-              </motion.div>
+                    {/* Story Text */}
+                    <motion.div
+                      className="bg-white rounded-2xl p-6 shadow-sm mb-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.25 + (pageNum * 0.1) }}
+                    >
+                      <p className="text-gray-800 leading-relaxed text-base font-bold">
+                        {diaryContent[storyKey as keyof typeof diaryContent] as string}
+                      </p>
+                    </motion.div>
+                  </div>
+                );
+              })}
 
-              {/* Story Text2 */}
-              <motion.div
-                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {diaryContent.story2}
-                </p>
-              </motion.div>
-
-              {/* Story Illustration3 */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(diaryContent.illustration3)}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Image failed to load:', diaryContent.illustration3);
-                    (e.target as HTMLImageElement).src = '/placeholder.png';
-                  }}
-                />
-              </motion.div>
-
-              {/* Story Text3 */}
-              <motion.div
-                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {diaryContent.story3}
-                </p>
-              </motion.div>
-
-              
-
-              {/* Story Illustration4 */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(diaryContent.illustration4)}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Image failed to load:', diaryContent.illustration4);
-                    (e.target as HTMLImageElement).src = '/placeholder.png';
-                  }}
-                />
-              </motion.div>
-
-              {/* Story Text4 */}
-              <motion.div
-                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {diaryContent.story4}
-                </p>
-              </motion.div>
-
-              {/* Story Illustration5 */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(diaryContent.illustration5)}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Image failed to load:', diaryContent.illustration5);
-                    (e.target as HTMLImageElement).src = '/placeholder.png';
-                  }}
-                />
-              </motion.div>
-
-              {/* Story Text5 */}
-              <motion.div
-                className="bg-white rounded-2xl p-6 shadow-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                <p className="text-gray-800 leading-relaxed text-base font-bold">
-                  {diaryContent.story5}
-                </p>
-              </motion.div>
-
-              <p className="text-gray-800 leading-relaxed text-base font-bold">
+              <p className="text-gray-800 leading-relaxed text-base font-bold text-center">
                 ----------------故事結束----------------
               </p>
-
             </div>
           </motion.div>
         )}

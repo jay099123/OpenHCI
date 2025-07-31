@@ -24,6 +24,7 @@ export interface PlanetWithStory extends Planet {
     dialog4: string;
     colorImage: string;
     titleImage: string;
+    planetColor: string; // Make sure this field exists
   };
 }
 
@@ -69,15 +70,20 @@ export function usePlanets() {
                   ...planet,
                   story,
                   diaryContent: {
-                    date: new Date(story.createdAt).toLocaleDateString('zh-TW'),
+                    // Use actual createdAt from database
+                    date: new Date(story.createdAt).toLocaleDateString('zh-TW', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit'
+                    }),
                     title: story.title,
-                    // Use actual text from pages, fallback to title if not enough pages
+                    // Use actual text from pages
                     story: sortedPages[0]?.text || `${story.title} - 開始我們的故事吧！`,
                     story2: sortedPages[1]?.text || '故事繼續...',
                     story3: sortedPages[2]?.text || '故事發展...',
                     story4: sortedPages[3]?.text || '故事高潮...',
                     story5: sortedPages[4]?.text || '故事結局...',
-                    // Use actual imageUrls from pages, fallback to placeholders
+                    // Use actual imageUrls from pages
                     illustration: sortedPages[0]?.imageUrl || "/page1SS.png",
                     illustration2: sortedPages[1]?.imageUrl || "/p2.png", 
                     illustration3: sortedPages[2]?.imageUrl || "/p3.png",
@@ -88,7 +94,9 @@ export function usePlanets() {
                     dialog3: "很棒的領悟！",
                     dialog4: `從《${story.title}》中我們可以學習到重要的品格。`,
                     colorImage: planet.image,
-                    titleImage: "/draw-09.png"
+                    titleImage: "/draw-09.png",
+                    // IMPORTANT: Use actual color from database, NO fallback to default
+                    planetColor: story.colorPalette?.[0]?.hex || planet.color || story.colorPalette?.[1]?.hex || story.colorPalette?.[2]?.hex
                   }
                 };
               } else {
