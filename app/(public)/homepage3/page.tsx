@@ -203,10 +203,10 @@ export default function Homepage2() {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      style={{ 
-        touchAction: 'none',
-        background: 'linear-gradient(to bottom, #1a1a2e, #16213e, #0f3460)'
-      }}
+      // style={{ 
+      //   touchAction: 'none',
+      //   background: 'linear-gradient(to bottom, #261a2e, #16213e, #0f3460)'
+      // }}
     >
       {/* Background Stars Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
