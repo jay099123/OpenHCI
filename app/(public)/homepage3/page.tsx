@@ -523,7 +523,7 @@ export default function Homepage2() {
 
       {/* Navigation Instructions */}
       <motion.div 
-        className="text-center text-white/60 text-sm flex-shrink-0 font-bold"
+        className="text-center text-white/60 text-sm flex-shrink-0 font-bold pb-5"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -544,7 +544,7 @@ export default function Homepage2() {
 
       {/* Navigation Dots */}
       <motion.div 
-        className="flex justify-center items-center pb-8 pt-4 flex-shrink-0"
+        className="flex justify-center items-center mb-40 pt-4 flex-shrink-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
