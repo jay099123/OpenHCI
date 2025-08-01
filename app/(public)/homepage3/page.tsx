@@ -656,30 +656,49 @@ export default function Homepage2() {
                  莉莉的作品：
               </span>
 
-              {/* Source Image from Database with Substitute */}
-              <motion.div
-                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
-                justify-center overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image
-                  src={getImageSrc(
-                    currentPlanet?.story?.sourceImage || 
-                    diaryContent.sourceImage || 
-                    '/draw-09.png' // Add your substitute image here
-                  )}
-                  alt={diaryContent.title}
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover rounded-2xl"
-                  onError={(e) => {
-                    console.warn('Source image failed to load:', currentPlanet?.story?.sourceImage);
-                    (e.target as HTMLImageElement).src = '/draw-09.png'; // Use substitute on error too
+              {/* Conditional Source Image Section */}
+              {currentPlanet?.story?.sourceImage ? (
+                // Has source image - show it
+                <motion.div
+                  className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                  justify-center overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Image
+                    src={getImageSrc(currentPlanet.story.sourceImage)}
+                    alt={diaryContent.title}
+                    width={400}
+                    height={200}
+                    className="w-full h-full object-cover rounded-2xl"
+                    onError={(e) => {
+                      console.warn('Source image failed to load:', currentPlanet?.story?.sourceImage);
+                      // Hide the broken image
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </motion.div>
+              ) : (
+                // No source image - show custom placeholder
+                <motion.div
+                  className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                  justify-center overflow-hidden"
+                  style={{
+                    background: `linear-gradient(135deg, ${currentPlanet?.color}20, ${currentPlanet?.color}40)`,
+                    border: `2px dashed ${currentPlanet?.color}60`
                   }}
-                />
-              </motion.div>
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="text-center text-gray-500 p-8">
+                    <div className="text-4xl mb-3">🎨</div>
+                    <p className="text-lg font-medium mb-2">暫無原創作品</p>
+                    <p className="text-sm opacity-70">期待莉莉的下一個創作！</p>
+                  </div>
+                </motion.div>
+              )}
 
               {/* Story Title */}
               <motion.div
