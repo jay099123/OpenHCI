@@ -146,7 +146,7 @@ export default function BookPage() {
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
                 }}>
-              📚 莉莉的故事書
+               故事書
             </h1>
             <p className="text-white/80 text-lg">點選書本開始閱讀</p>
           </motion.div>

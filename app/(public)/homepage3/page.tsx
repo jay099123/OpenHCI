@@ -652,7 +652,7 @@ export default function Homepage2() {
             />
               </motion.div>
 
-              <span className="text-2xl font-bold text-gray-700">
+              <span className="text-xl font-bold text-gray-700">
                  莉莉的作品：
               </span>
 
