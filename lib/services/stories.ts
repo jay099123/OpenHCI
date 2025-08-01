@@ -19,6 +19,7 @@ export interface Story {
   }[];
   pages: { [key: string]: StoryPage }; // Pages indexed by number (0, 1, 2, etc.)
   planetName: string; // Optional field for planet name
+  sourceImage?: string; // Add this field
 }
 
 export async function getAllStories(): Promise<Story[]> {

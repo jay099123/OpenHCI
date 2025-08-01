@@ -12,6 +12,7 @@ export interface Planet {
   isActive: boolean;
   createdAt: string;
   storyId: string;
+  sourceImage?: string; // Make it optional since it might not exist in all stories
 }
 
 // Generate planets from stories with dynamic theming
@@ -45,10 +46,11 @@ export async function getAllPlanets(): Promise<Planet[]> {
       
       const themeIndex = index % themes.length;
       
-      console.log(`🏷️ Planet name for story "${story.title}":`, {
+      console.log(`🏷️ Planet data for story "${story.title}":`, {
         dbPlanetName: story.planetName,
         generatedName: generatePlanetName(primaryColor, index),
-        finalName: planetName
+        finalName: planetName,
+        sourceImage: story.sourceImage
       });
       
       return {
@@ -61,7 +63,8 @@ export async function getAllPlanets(): Promise<Planet[]> {
         theme: themes[themeIndex],
         isActive: true,
         createdAt: story.createdAt,
-        storyId: story.id
+        storyId: story.id,
+        sourceImage: story.sourceImage || '/placeholder.png' // Add sourceImage from story
       };
     });
     

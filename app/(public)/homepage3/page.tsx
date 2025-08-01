@@ -83,7 +83,8 @@ export default function Homepage2() {
     colorImage: "/placeholder.png",
     titleImage: "/placeholder.png",
     planetName: currentPlanet?.name || currentPlanet?.story?.planetName || "未知星球",
-    planetColor: currentPlanet?.color || currentPlanet?.story?.colorPalette?.[0]?.hex || "#8b5cf6"
+    planetColor: currentPlanet?.color || currentPlanet?.story?.colorPalette?.[0]?.hex || "#8b5cf6",
+    sourceImage: currentPlanet?.sourceImage || currentPlanet?.story?.sourceImage || "placeholder.png",
   };
 
   // Use safe content
@@ -649,6 +650,35 @@ export default function Homepage2() {
                 boxShadow: `0 2px 8px ${currentPlanet?.story?.colorPalette?.[0]?.hex || currentPlanet?.color || '#8b5cf6'}40`
               }}
             />
+              </motion.div>
+
+              <span className="text-2xl font-bold text-gray-700">
+                 莉莉的作品：
+              </span>
+
+              {/* Source Image from Database with Substitute */}
+              <motion.div
+                className="rounded-2xl mb-6 min-h-[200px] flex items-center 
+                justify-center overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={getImageSrc(
+                    currentPlanet?.story?.sourceImage || 
+                    diaryContent.sourceImage || 
+                    '/draw-09.png' // Add your substitute image here
+                  )}
+                  alt={diaryContent.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    console.warn('Source image failed to load:', currentPlanet?.story?.sourceImage);
+                    (e.target as HTMLImageElement).src = '/draw-09.png'; // Use substitute on error too
+                  }}
+                />
               </motion.div>
 
               {/* Story Title */}

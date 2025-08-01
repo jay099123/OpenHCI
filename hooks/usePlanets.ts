@@ -24,7 +24,8 @@ export interface PlanetWithStory extends Planet {
     dialog4: string;
     colorImage: string;
     titleImage: string;
-    planetColor: string; // Make sure this field exists
+    planetColor: string;
+    sourceImage: string; // Add sourceImage field
   };
 }
 
@@ -65,6 +66,7 @@ export const usePlanets = () => {
               // Sort pages by pageNumber to ensure correct order
               const sortedPages = sortPagesByNumber(story.pages);
               console.log(`📑 Sorted pages for ${story.title}:`, sortedPages);
+              console.log(`🖼️ Source image for ${story.title}:`, story.sourceImage);
               
               return {
                 ...planet,
@@ -95,8 +97,10 @@ export const usePlanets = () => {
                   dialog4: `從《${story.title}》中我們可以學習到重要的品格。`,
                   colorImage: planet.image,
                   titleImage: "/draw-09.png",
-                  // IMPORTANT: Use actual color from database, NO fallback to default
-                  planetColor: story.colorPalette?.[0]?.hex || planet.color || story.colorPalette?.[1]?.hex || story.colorPalette?.[2]?.hex
+                  // Use actual color from database
+                  planetColor: story.colorPalette?.[0]?.hex || planet.color || story.colorPalette?.[1]?.hex || story.colorPalette?.[2]?.hex,
+                  // Add sourceImage from story
+                  sourceImage: story.sourceImage || planet.sourceImage || '/placeholder.png'
                 }
               };
             } else {
